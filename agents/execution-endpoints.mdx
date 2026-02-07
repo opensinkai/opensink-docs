@@ -1,0 +1,208 @@
+---
+title: "Execution Endpoints"
+description: "Webhooks that let OpenSink call your agent back when input is resolved."
+icon: "webhook"
+---
+
+## What is an Execution Endpoint?
+
+An **Execution Endpoint** is a webhook URL that OpenSink calls when an agent needs to resume execution.
+
+It answers:
+
+> **"How does my agent know it's time to continue?"**
+
+The most common trigger: a human resolves an [input request](/agents/input-requests).
+
+<Note>
+  Execution endpoints are optional. If your agent polls for input request status instead, you don't need one.
+</Note>
+
+---
+
+## Why Execution Endpoints exist
+
+Without a callback mechanism, your agent must poll OpenSink to check if input has been provided.
+
+Polling works, but it means:
+
+- wasted requests when nothing has changed
+- latency between input and resumption
+- a running process that does nothing most of the time
+
+Execution endpoints eliminate this. OpenSink calls your agent the moment input is available.
+
+---
+
+## How it works
+
+<Steps>
+  <Step title="Configure the endpoint">
+    Set an execution endpoint on your agent — a URL, HTTP method, and optional headers/body.
+  </Step>
+  <Step title="Agent requests input">
+    During a session, the agent creates an input request. Execution pauses.
+  </Step>
+  <Step title="Human responds">
+    A human submits a response to the input request.
+  </Step>
+  <Step title="OpenSink calls your endpoint">
+    OpenSink sends an HTTP request to your execution endpoint with the session and request IDs.
+  </Step>
+  <Step title="Your agent resumes">
+    Your agent loads the session, reads the input response, and continues execution.
+  </Step>
+</Steps>
+
+---
+
+## Configuring an endpoint
+
+Set the execution endpoint when creating or updating an agent:
+
+```bash
+curl -X PATCH https://api.opensink.com/api/v1/agents/AGENT_ID \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -d '{
+    "execution_endpoint": {
+      "url": "https://your-server.com/agents/execute",
+      "method": "POST",
+      "headers": {
+        "X-Custom-Header": "value"
+      },
+      "body": {
+        "source": "opensink"
+      }
+    }
+  }'
+```
+
+| Field | Description |
+| --- | --- |
+| `url` | The URL to call |
+| `method` | HTTP method — `POST`, `GET`, `PUT`, or `DELETE` |
+| `headers` | Optional custom headers included in every call |
+| `body` | Optional base body merged into every call (not used for GET) |
+
+---
+
+## What OpenSink sends
+
+When calling your endpoint, OpenSink includes:
+
+### Headers
+
+| Header | Description |
+| --- | --- |
+| `Content-Type` | `application/json` |
+| `X-OpenSink-Session-Id` | The session that needs to resume |
+| `X-OpenSink-Request-Id` | The input request that was resolved |
+| `X-OpenSink-Secret` | Your workspace's execution secret (for verification) |
+| Custom headers | Any headers you configured on the endpoint |
+
+### Body (for POST/PUT/DELETE)
+
+```json
+{
+  "session_id": "session-uuid",
+  "request_id": "request-uuid",
+  ...your configured body fields
+}
+```
+
+---
+
+## Handling the callback
+
+Your endpoint should:
+
+1. Verify the request (check `X-OpenSink-Secret`)
+2. Load the session state from OpenSink
+3. Read the resolved input request response
+4. Continue execution
+5. Update the session status when done
+
+```ts
+app.post('/agents/execute', async (req, res) => {
+  const { session_id, request_id } = req.body;
+
+  // Load session
+  const session = await opensink.getSession(session_id);
+
+  // Load the resolved input
+  const inputRequest = await opensink.getInputRequest(request_id);
+  const userResponse = inputRequest.response;
+
+  // Continue agent logic based on the response
+  if (userResponse.approved) {
+    await executeTrades(session.state.proposed_trades);
+    await opensink.updateSession(session_id, { status: 'completed' });
+  } else {
+    await opensink.updateSession(session_id, {
+      status: 'completed',
+      state: { ...session.state, cancelled: true },
+    });
+  }
+
+  res.status(200).send({ ok: true });
+});
+```
+
+---
+
+## Error handling
+
+If your endpoint returns an error or is unreachable:
+
+- The session status is set to `failed`
+- The error message is stored on the session
+- The agent status is updated to `failed`
+
+This ensures failures are always visible, even when the callback itself fails.
+
+---
+
+## Verifying requests
+
+Use the `X-OpenSink-Secret` header to verify that incoming requests are from OpenSink.
+
+The secret is set per workspace and can be found in your workspace settings. Compare it against the header value before processing the request.
+
+---
+
+## Polling as an alternative
+
+If you prefer not to use webhooks, your agent can poll for resolved input requests:
+
+```bash
+curl "https://api.opensink.com/api/v1/agent-session-input-requests?session_id=SESSION_ID&status=resolved" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+This works for simpler setups or environments where inbound webhooks aren't practical.
+
+---
+
+## What Execution Endpoints are not
+
+Execution Endpoints are **not**:
+
+- a job scheduler
+- a general-purpose event system
+- a way to trigger agents on a timer (use [Background Jobs](/core-concepts/background-jobs) for that)
+
+They exist for one purpose: **resuming agent execution after human input**.
+
+---
+
+## When to use Execution Endpoints
+
+Use Execution Endpoints when:
+
+- your agent uses input requests
+- you want instant resumption after human input
+- you don't want to run a polling loop
+- your agent runs as a serverless function or API server
+
+If your agent waits for humans — execution endpoints close the loop.

@@ -1,0 +1,224 @@
+---
+title: "Configurations"
+description: "Versioned, schema-validated settings for agent behavior — without redeploying."
+icon: "gear"
+---
+
+## What is a Configuration?
+
+A **Configuration** is a versioned set of settings that controls how an agent behaves.
+
+It answers:
+
+> **"What should this agent do right now, and what did it do before?"**
+
+Examples of things stored in configurations:
+
+- system prompts
+- model parameters (temperature, max tokens)
+- tool selections
+- business rules
+- thresholds and limits
+
+<Note>
+  Configurations are immutable. When you change settings, a new version is created. The old version is never modified.
+</Note>
+
+---
+
+## Why configurations exist
+
+Hardcoding agent behavior means redeploying to change anything.
+
+Configurations give you:
+
+- **Live updates** — change behavior without redeploying
+- **Version history** — see exactly what changed and when
+- **Rollback** — restore any previous version instantly
+- **Validation** — settings are validated against a JSON Schema before saving
+- **Variants** — run different configurations side by side
+
+---
+
+## Structure
+
+A configuration contains:
+
+| Field | Description |
+| --- | --- |
+| `variant` | A named branch of configuration (e.g. `default`, `aggressive`, `conservative`) |
+| `version` | Global version number — increments for any change across all variants |
+| `variant_version` | Version within this specific variant |
+| `schema` | A JSON Schema that defines what the configuration values must look like |
+| `value` | The actual configuration values |
+
+---
+
+## Schema and value
+
+Every configuration has two parts: a **schema** and a **value**.
+
+The schema defines the shape. The value holds the data.
+
+### Example schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "model": {
+      "type": "string",
+      "enum": ["claude-sonnet-4-5-20250929", "gpt-4o"],
+      "title": "Model"
+    },
+    "temperature": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 2,
+      "title": "Temperature"
+    },
+    "system_prompt": {
+      "type": "string",
+      "title": "System Prompt"
+    }
+  },
+  "required": ["model", "system_prompt"]
+}
+```
+
+### Example value
+
+```json
+{
+  "model": "claude-sonnet-4-5-20250929",
+  "temperature": 0.7,
+  "system_prompt": "You are a financial analyst. Summarize news concisely."
+}
+```
+
+Values are validated against the schema before saving. If they don't match, the configuration is rejected.
+
+---
+
+## Variants
+
+Variants let you maintain multiple configuration branches for the same agent.
+
+Common patterns:
+
+| Variant | Purpose |
+| --- | --- |
+| `default` | Standard production behavior |
+| `aggressive` | Higher risk tolerance, faster execution |
+| `conservative` | Lower risk, more confirmations |
+| `testing` | Experimental settings |
+
+Each variant has its own version history. You switch between them by updating the agent's active configuration.
+
+---
+
+## Version history
+
+Every change creates a new version. Nothing is overwritten.
+
+This means you can:
+
+- see the full history of changes
+- compare versions
+- restore any previous version (creates a new version with the old values)
+- understand exactly what an agent was configured to do at any point in time
+
+---
+
+## Using configurations in your agent
+
+Your agent reads its active configuration at the start of each session:
+
+```bash
+curl https://api.opensink.com/api/v1/agent-configurations/agent/AGENT_ID \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+Response:
+
+```json
+{
+  "id": "config-uuid",
+  "agent_id": "agent-uuid",
+  "variant": "default",
+  "version": 5,
+  "variant_version": 3,
+  "schema": { ... },
+  "value": {
+    "model": "claude-sonnet-4-5-20250929",
+    "temperature": 0.7,
+    "system_prompt": "You are a financial analyst..."
+  }
+}
+```
+
+Then use those values to drive behavior:
+
+```ts
+const config = await getActiveConfig(agentId);
+const response = await llm.chat({
+  model: config.value.model,
+  temperature: config.value.temperature,
+  system: config.value.system_prompt,
+  messages: [...],
+});
+```
+
+---
+
+## Creating a new version
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/agent-configurations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -d '{
+    "agent_id": "AGENT_ID",
+    "variant": "default",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "model": { "type": "string" },
+        "temperature": { "type": "number" }
+      }
+    },
+    "value": {
+      "model": "claude-sonnet-4-5-20250929",
+      "temperature": 0.5
+    }
+  }'
+```
+
+This creates a new version and automatically sets it as the agent's active configuration.
+
+---
+
+## What configurations are not
+
+Configurations are **not**:
+
+- environment variables
+- secrets management
+- feature flags
+- a key-value store
+
+They are **structured, validated, versioned settings** for agent behavior.
+
+---
+
+## When to use configurations
+
+Use configurations when:
+
+- you want to change agent behavior without redeploying
+- you need a history of what changed
+- settings should be validated before applying
+- different scenarios need different settings
+- non-engineers need to adjust agent behavior
+
+If you're editing a config file and restarting a process — configurations are the better path.

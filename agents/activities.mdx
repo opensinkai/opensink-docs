@@ -1,0 +1,153 @@
+---
+title: "Activities"
+description: "A structured log of everything that happens during an agent session."
+icon: "list-timeline"
+---
+
+## What is an Activity?
+
+An **Activity** is a single log entry that records something that happened during a session.
+
+Activities answer:
+
+> **"What did the agent do, and in what order?"**
+
+They form a complete, inspectable timeline of a session's execution.
+
+---
+
+## Why Activities exist
+
+Agents in production need more than a final status.
+
+You need to know:
+
+- When did execution start?
+- What messages did the agent produce?
+- When did it request input?
+- When was that input resolved?
+- Did it write results to a sink?
+- What state changes occurred?
+
+Activities provide this without parsing logs, tracing calls, or instrumenting your framework.
+
+---
+
+## Activity types
+
+| Type | Description |
+| --- | --- |
+| `session_started` | Session was created and execution began |
+| `session_ended` | Session completed or failed |
+| `message` | Agent produced a human-readable message |
+| `input_request_created` | Agent requested input from a human |
+| `input_request_resolved` | Human responded to an input request |
+| `sink_item_created` | Agent wrote an item to a sink |
+| `state_updated` | Session state was updated |
+
+---
+
+## Activity sources
+
+Each activity has a **source** indicating who created it:
+
+| Source | Description |
+| --- | --- |
+| `system` | Created automatically by OpenSink (e.g. session start/end, input request lifecycle) |
+| `agent` | Created by your agent code (e.g. messages, progress updates) |
+| `user` | Created by a human (e.g. manual notes) |
+
+---
+
+## Structure
+
+| Field | Description |
+| --- | --- |
+| `type` | What happened |
+| `source` | Who created it — `system`, `agent`, or `user` |
+| `message` | Human-readable description |
+| `payload` | Optional structured data |
+| `related_entity_id` | Optional link to another entity (e.g. an input request ID, a sink item ID) |
+| `links` | Optional list of associated links |
+| `session_id` | The session this activity belongs to |
+| `agent_id` | The agent that owns this session |
+
+---
+
+## Automatic activities
+
+OpenSink creates some activities automatically:
+
+- **`session_started`** — when a session is created
+- **`session_ended`** — when a session status becomes `completed` or `failed`
+- **`input_request_created`** — when an input request is created
+- **`input_request_resolved`** — when an input request is resolved
+
+You don't need to log these yourself.
+
+---
+
+## Creating activities from your agent
+
+Your agent can log its own activities during execution:
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/agent-session-activities \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -d '{
+    "session_id": "SESSION_ID",
+    "agent_id": "AGENT_ID",
+    "type": "message",
+    "source": "agent",
+    "message": "Analyzed 15 articles. Found 3 relevant to portfolio.",
+    "payload": {
+      "articles_analyzed": 15,
+      "relevant_count": 3
+    }
+  }'
+```
+
+This makes the agent's progress visible without requiring a custom UI.
+
+---
+
+## Viewing activities
+
+Activities are listed in reverse chronological order and can be filtered by:
+
+- `session_id` — activities for a specific session
+- `agent_id` — activities across all sessions for an agent
+- `type` — only specific activity types
+- `source` — only system, agent, or user activities
+
+```bash
+curl "https://api.opensink.com/api/v1/agent-session-activities?session_id=SESSION_ID" \
+  -H "Authorization: Bearer YOUR_API_TOKEN"
+```
+
+---
+
+## What Activities are not
+
+Activities are **not**:
+
+- debug logs
+- LLM traces
+- metrics or telemetry
+- a replacement for structured logging
+
+They are **high-level, meaningful events** that tell you what an agent did during a session.
+
+---
+
+## When to use Activities
+
+Activities are useful when:
+
+- you need to understand what happened during a session
+- you want agent progress visible in the UI
+- you need an audit trail for compliance
+- debugging requires knowing the sequence of events
+
+If your agent does something worth knowing about — log an activity.

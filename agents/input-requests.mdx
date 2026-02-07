@@ -1,0 +1,235 @@
+---
+title: "Input Requests"
+description: "Schema-driven human-in-the-loop — pause agents, collect input, resume execution."
+icon: "message-question"
+---
+
+## What is an Input Request?
+
+An **Input Request** is a structured prompt that pauses agent execution and waits for a human response.
+
+It answers:
+
+> **"What does the agent need from a human before it can continue?"**
+
+Examples:
+
+- "Approve these trades before execution"
+- "Select which articles to include in the report"
+- "Confirm the deployment target"
+- "Provide the missing API credentials"
+
+<Info>
+  Input Requests use JSON Schema to define what input is expected. OpenSink renders a form from the schema and validates the response before accepting it.
+</Info>
+
+---
+
+## Why Input Requests exist
+
+Many agent tasks require human judgment at specific points.
+
+Without a structured mechanism, teams resort to:
+
+- Slack messages and manual follow-ups
+- Polling databases for flags
+- Building custom approval UIs
+- Stopping and restarting agents manually
+
+Input Requests replace all of this with a single, consistent primitive.
+
+---
+
+## How it works
+
+<Steps>
+  <Step title="Agent creates a request">
+    The agent sends a request with a title, message, and JSON Schema describing the expected input.
+  </Step>
+  <Step title="Execution pauses">
+    The session enters `waiting_for_input`. The agent stops.
+  </Step>
+  <Step title="Human responds">
+    OpenSink renders a form from the schema. The human fills it out and submits.
+  </Step>
+  <Step title="Response is validated">
+    The response is validated against the schema. Invalid responses are rejected.
+  </Step>
+  <Step title="Execution resumes">
+    The session moves to `processing_input`. If an execution endpoint is configured, OpenSink calls it automatically.
+  </Step>
+</Steps>
+
+---
+
+## Request structure
+
+| Field | Description |
+| --- | --- |
+| `key` | Stable identifier the agent uses to recognize this request type |
+| `title` | Short label displayed in the UI |
+| `message` | Human-readable explanation of what's needed |
+| `schema` | JSON Schema defining the expected input |
+
+---
+
+## Example: Trade approval
+
+### Creating the request
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/agent-session-input-requests \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -d '{
+    "session_id": "SESSION_ID",
+    "agent_id": "AGENT_ID",
+    "key": "approve_trades",
+    "title": "Approve Trades",
+    "message": "The agent has proposed the following trades. Please review and approve.",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "approved": {
+          "type": "boolean",
+          "title": "Approve all trades?"
+        },
+        "notes": {
+          "type": "string",
+          "title": "Notes (optional)"
+        }
+      },
+      "required": ["approved"]
+    }
+  }'
+```
+
+### Resolving the request
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/agent-session-input-requests/REQUEST_ID/resolve \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -d '{
+    "response": {
+      "approved": true,
+      "notes": "Looks good, proceed."
+    }
+  }'
+```
+
+---
+
+## What happens on resolution
+
+When a response is submitted:
+
+1. The response is validated against the request's JSON Schema
+2. The input request status changes to `resolved`
+3. The session status changes to `processing_input`
+4. An `input_request_resolved` activity is logged
+5. If the agent has an [execution endpoint](/agents/execution-endpoints), it is called with the session and request IDs
+
+Your agent then loads the session, reads the response, and continues.
+
+---
+
+## Reading the response in your agent
+
+```ts
+// Fetch the resolved input request
+const inputRequest = await fetch(
+  `https://api.opensink.com/api/v1/agent-session-input-requests/${requestId}`,
+  { headers: { Authorization: `Bearer ${token}` } }
+).then(r => r.json());
+
+if (inputRequest.response.approved) {
+  executeTrades(session.state.proposed_trades);
+} else {
+  cancelTrades();
+}
+```
+
+---
+
+## The `key` field
+
+The `key` field is a stable identifier that your agent uses to recognize different types of input requests.
+
+For example, an agent might create requests with keys like:
+
+- `approve_trades`
+- `select_articles`
+- `confirm_deployment`
+
+This lets your agent handle different request types without parsing titles or messages.
+
+---
+
+## Schema flexibility
+
+The JSON Schema can describe any input shape:
+
+**Simple boolean:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "approved": { "type": "boolean", "title": "Approve?" }
+  },
+  "required": ["approved"]
+}
+```
+
+**Selection from options:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "selected_articles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "title": "Select articles to include"
+    }
+  }
+}
+```
+
+**Free-form input:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "instructions": {
+      "type": "string",
+      "title": "Additional instructions for the agent"
+    }
+  }
+}
+```
+
+---
+
+## What Input Requests are not
+
+Input Requests are **not**:
+
+- chat messages
+- notifications
+- approval workflows with routing rules
+- multi-step forms
+
+They are a **single, schema-validated exchange** between an agent and a human.
+
+---
+
+## When to use Input Requests
+
+Use Input Requests when:
+
+- an agent must not proceed without human approval
+- the input needed has a clear, predictable shape
+- you want validation before the agent acts on the input
+- execution should automatically resume after the response
+
+If your agent needs a human — this is how it asks.

@@ -1,0 +1,162 @@
+---
+title: "Agents"
+description: "How OpenSink gives your AI agents structure, visibility, and control in production."
+icon: "robot"
+---
+
+## What is an Agent?
+
+An **Agent** in OpenSink is a registered entity that represents an AI agent you run in production.
+
+It is the anchor point for everything else:
+
+- **Sessions** track its executions
+- **Configurations** control its behavior
+- **Activities** log what happened
+- **Input Requests** enable human interaction
+
+OpenSink does not _run_ your agent. It gives your agent **identity, state, and control**.
+
+<Info>
+  OpenSink is framework-agnostic. Your agent can be built with LangChain, CrewAI, custom code, or anything else. OpenSink doesn't care how it runs — only that it has structure.
+</Info>
+
+---
+
+## Why register agents?
+
+Without a central record, production agents become invisible:
+
+- Which agents exist?
+- What are they configured to do?
+- Are they running right now?
+- Did they fail?
+- What did they produce?
+
+Registering an agent in OpenSink answers all of these.
+
+---
+
+## What an Agent contains
+
+| Field | Description |
+| --- | --- |
+| `name` | Human-readable name |
+| `description` | What this agent does |
+| `status` | Current state — derived from its latest session |
+| `config_id` | Active configuration version |
+| `execution_endpoint` | Optional webhook for resuming execution |
+
+Status is automatically kept in sync with the agent's latest session.
+
+---
+
+## Agent status
+
+An agent's status reflects what its most recent session is doing:
+
+| Status | Meaning |
+| --- | --- |
+| `running` | Agent is actively executing |
+| `waiting_for_input` | Paused, waiting for human input |
+| `processing_input` | Input received, resuming execution |
+| `completed` | Latest session finished successfully |
+| `failed` | Latest session failed |
+
+You don't set this manually. It updates automatically as sessions progress.
+
+---
+
+## Creating an Agent
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/agents \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -d '{
+    "name": "Finance News Agent",
+    "description": "Monitors financial news and writes summaries to a sink"
+  }'
+```
+
+When you create an agent, OpenSink automatically:
+
+1. Creates the agent record
+2. Creates a default configuration (empty schema and values)
+3. Links the agent to that configuration
+
+Your agent is ready to run sessions immediately.
+
+---
+
+## How Agents connect to everything
+
+An Agent is the central hub. Here's how the pieces fit together:
+
+<Columns cols={2}>
+  <Card title="Configurations" icon="gear" href="/agents/configurations">
+    Versioned settings that control agent behavior — prompts, parameters, tool selections.
+  </Card>
+  <Card title="Sessions" icon="arrow-up-big-small" href="/core-concepts/sessions">
+    Durable execution records. Each run creates a session that tracks state and status.
+  </Card>
+  <Card title="Input Requests" icon="message-question" href="/agents/input-requests">
+    Schema-driven prompts that pause execution and wait for human input.
+  </Card>
+  <Card title="Activities" icon="list-timeline" href="/agents/activities">
+    A log of everything that happened during a session — starts, messages, inputs, results.
+  </Card>
+</Columns>
+
+---
+
+## The typical agent loop
+
+Most agents follow this pattern:
+
+<Steps>
+  <Step title="Agent starts">
+    Your code creates a session via the API. Status becomes `running`.
+  </Step>
+  <Step title="Agent does work">
+    Reads data, calls LLMs, makes decisions. Logs activities along the way.
+  </Step>
+  <Step title="Agent produces results">
+    Writes items to sinks — the durable output of its work.
+  </Step>
+  <Step title="Agent needs input (optional)">
+    Creates an input request. Execution pauses. A human responds.
+  </Step>
+  <Step title="Agent completes">
+    Updates the session to `completed`. Status propagates to the agent.
+  </Step>
+</Steps>
+
+---
+
+## What Agents are not
+
+Agents in OpenSink are **not**:
+
+- an execution runtime
+- a framework
+- a prompt chain
+- a workflow engine
+
+OpenSink does not decide _what_ your agent does or _how_ it runs.
+
+It provides the infrastructure to make your agent **observable, configurable, and controllable** in production.
+
+---
+
+## When to use Agents
+
+Register an agent in OpenSink when:
+
+- it runs in production (not just notebooks)
+- you need to track its executions
+- its behavior should be configurable without redeploying
+- humans need to interact with it
+- you need to know what it did and when
+
+If your agent matters — register it.

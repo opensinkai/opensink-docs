@@ -24,9 +24,19 @@
           {
             "group": "Core Concepts",
             "pages": [
+              "core-concepts/agents",
               "core-concepts/sinks",
               "core-concepts/sessions",
               "core-concepts/background-jobs"
+            ]
+          },
+          {
+            "group": "Agents",
+            "pages": [
+              "agents/configurations",
+              "agents/input-requests",
+              "agents/activities",
+              "agents/execution-endpoints"
             ]
           }
         ]
