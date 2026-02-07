@@ -1,0 +1,216 @@
+---
+title: "Sinks & Items"
+description: "How OpenSink stores, organizes, and exposes agent-produced information."
+icon: "sink"
+---
+
+## Overview
+
+Sinks and Items are the foundation of OpenSink.
+
+They define **how information produced by agents is stored, organized, and inspected**.
+
+If Sessions are about _execution_, Sinks and Items are about _results_.
+
+---
+
+## What is a Sink?
+
+A **Sink** is a named container for related information.
+
+It answers one simple question:
+
+> **“Where should this kind of information go?”**
+
+Examples of Sinks:
+
+- Financial news
+- Trading activity
+- Research findings
+- Deployments
+- Alerts
+- New user signups
+
+Each Sink is intentionally lightweight and opinionated.
+
+<Note>
+  A Sink is not a database table, a log stream, or a metrics bucket.
+
+  <br />
+
+  It is a logical destination for meaningful information.
+</Note>
+
+---
+
+## What is an Item?
+
+An **Item** is a single, meaningful unit of information written into a Sink.
+
+Items represent:
+
+- events
+- findings
+- decisions
+- results
+
+Examples of Items:
+
+- “Apple stock dropped 3%”
+- “Trade executed for AAPL”
+- “Deployment to production succeeded”
+- “New customer subscribed”
+
+Items are **not raw logs** and **not metrics**. They are information worth inspecting later.
+
+---
+
+## How Sinks and Items work together
+
+Every Item belongs to exactly one Sink.
+
+You can think of the relationship like this:
+
+| Concept | Purpose                       |
+| ------- | ----------------------------- |
+| Sink    | Groups related information    |
+| Item    | A single piece of information |
+
+A Sink without Items is empty.\
+Items without a Sink do not exist.
+
+---
+
+## Creating a Sink
+
+Sinks are created once and reused over time.
+
+You typically create a Sink for each category of information you care about.
+
+Examples:
+
+- one Sink for financial news
+- one Sink for trades
+- one Sink for deployments
+
+Once created, agents and systems can write Items into it indefinitely.
+
+---
+
+## Writing Items to a Sink
+
+Items are written via a simple HTTP API.
+
+Example:
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/sink-items   -H "Content-Type: application/json"   -H "Authorization: Bearer YOUR_API_TOKEN"   -d '{
+    "sink_id": "YOUR_SINK_ID",
+    "title": "Apple stock drops 3%",
+    "body": "Shares fell after the earnings report missed expectations.",
+    "type": "event",
+    "url": "https://example.com/apple-news",
+    "fields": {
+      "ticker": "AAPL",
+      "change_percent": -3
+    }
+  }'
+```
+
+That’s it.
+
+There is:
+
+- no schema to migrate
+- no table to manage
+- no UI to build
+
+---
+
+## Item structure
+
+An Item can include:
+
+| Field      | Description                            |
+| ---------- | -------------------------------------- |
+| `title`    | Short, human-readable summary          |
+| `body`     | Optional detailed content              |
+| `type`     | Optional classification                |
+| `url`      | Optional external reference            |
+| `fields`   | Optional structured data               |
+| timestamps | When the Item occurred and was created |
+
+All fields are optional except `title`.
+
+This flexibility allows Items to represent many kinds of information without forcing a rigid schema.
+
+---
+
+## Viewing and searching Items
+
+OpenSink automatically:
+
+- indexes Items for full-text search
+- exposes them in the UI
+- allows filtering by Sink
+
+This lets you:
+
+- inspect what agents produced
+- search across time
+- understand what happened without digging through logs
+
+---
+
+## What Sinks and Items are not
+
+It’s important to understand what this system is _not_ trying to be.
+
+Sinks and Items are **not**:
+
+- a metrics system
+- a log aggregation platform
+- a data warehouse
+- a general-purpose database
+
+They are designed for **durable, meaningful information**, not high-volume telemetry.
+
+---
+
+## When to use Sinks and Items
+
+Sinks and Items are ideal when:
+
+- an agent produces information you may need later
+- humans need to inspect or search results
+- information should survive restarts and failures
+- results matter more than raw execution details
+
+If you find yourself sending something to Slack just so it isn’t lost — it probably belongs in a Sink.
+
+---
+
+## How this fits with Sessions
+
+- **Sessions** track _execution_
+- **Sinks & Items** store _results_
+
+They are complementary, not overlapping.
+
+Most agents:
+
+1. run inside a Session
+2. produce one or more Items
+3. store them in Sinks
+
+---
+
+## Summary
+
+- Sinks group related information
+- Items store individual results
+- Together, they form the durable memory of your agents
+
+This is the core loop of OpenSink:
+
+> **Agents produce information → OpenSink stores it → humans and systems inspect it**

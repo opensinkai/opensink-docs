@@ -1,0 +1,51 @@
+---
+title: "Welcome to Opensink"
+description: "OpenSink centralizes important agent-generated data and lets you configure agent behavior through clear, inspectable APIs — on any platform."
+icon: "hand-wave"
+---
+
+<Note>
+  OpenSink is **a platform that gives you the right tools to store important information produced by AI agents, and to build and manage your AI agents.** \*\*OpenSink is not \*\*an agent framework, an automation platform, OR a place where you can build AI agents.
+</Note>
+
+## Built to work with every agent stack
+
+<Columns cols={2}>
+  <Card title="Any agent framework" icon="puzzle-piece">
+    LangChain, custom agents, scripts, cron jobs, background workers — OpenSink does not care how your agent is built.
+  </Card>
+  <Card title="Any platform" icon="globe">
+    Cloud, serverless, containers, CI, local machines. No runtime coupling. Complete freedom over the tech stack.
+  </Card>
+</Columns>
+
+## Problems OpenSink Solves
+
+### Important information gets lost
+
+The important information produced by the AI agents and systems in getting lost in logs, emails, slack messages, whatsapp messages, etc., OpenSink gives you a place where you can store and immediately see the important information - not the noise, but the things that matter.
+
+<Tip>
+  **Example**: an agent that summarizes the important financial news every day for you - instead of sending slack messages, you can send it to an OpenSink "Sink". Once you do that, you can easily see the news in OpenSink, they become searchable, and you can go back and check them whenever you have to.
+</Tip>
+
+### Building AI agents that can pause work, ask for human input, and resume, is too complex.
+
+**Sessions** and \*\*Input Requests \*\*are here to help you solve this.
+
+- A session holds allows you to store information so that you can resume an agent task easily.
+- In addition to that, it allows your agent to create an **Input Request** - a request for human intervention for important actions. Once the request is resolved by a human, it gets send to the agent so it can resume the work.
+
+<Tip>
+  **Example**: a trading bot that analyzes the market and asks you for an approval to execute certain trades. It can allow you to approve/deny trades, or maybe even change the amount of the trade. This is completely flexible, and you can build any type of requests.
+</Tip>
+
+#### Managing background jobs is painful
+
+Background jobs are an important part of the AI agents that have to run periodically, like news agents, trading agents, marketing agents, competitor analysis agents, etc.. OpenSink provides you an easy way to create background jobs that will call your endpoints based on your schedule. This works with any server, and is language agnostic.
+
+## Quickstart
+
+<Card title="Create our first Sink" icon="sparkles" href="/quickstart">
+  Create your first Sink, push your first Item, and run a resumable agent in minutes.
+</Card>

@@ -1,0 +1,168 @@
+---
+title: "API Reference"
+description: "Interact with OpenSink programmatically from any agent, script, or service."
+---
+
+## Overview
+
+The OpenSink API lets you send information, trigger execution, and inspect state from **any platform**.
+
+It is designed to be:
+- simple to integrate
+- explicit in behavior
+- safe to use from automation and AI agents
+
+<Info>
+OpenSink works with **any agent framework**, **any automation platform**, and **any programming language** that can make HTTP requests.
+</Info>
+
+---
+
+## Base URL
+
+All API requests are made to:
+
+```
+https://api.opensink.com/api/v1
+```
+
+---
+
+## Authentication
+
+OpenSink uses **API key authentication**.
+
+Each request must include your API key in the `Authorization` header:
+
+```http
+Authorization: Bearer YOUR_API_KEY
+```
+
+### Creating an API key
+
+You can create and manage API keys from the **API Keys** page in the dashboard.
+
+<Steps>
+  <Step title="Open the dashboard">
+    Navigate to the API Keys section of your workspace.
+  </Step>
+
+  <Step title="Create a new key">
+    Give the key a name so you know where it’s used.
+  </Step>
+
+  <Step title="Copy and store securely">
+    API keys are shown only once.
+  </Step>
+</Steps>
+
+<Warning>
+Treat API keys like passwords.  
+Do not commit them to source control or expose them in client-side code.
+</Warning>
+
+---
+
+## Authorization Model
+
+API keys are scoped to a **workspace**.
+
+They can be used to:
+- create and read Sinks
+- write Items
+- manage Sessions
+- configure and trigger Background Jobs
+
+Access is enforced at the workspace level.
+
+---
+
+## Request & Response Format
+
+- All requests use JSON
+- All responses are JSON
+- UTF-8 encoding
+
+### Example request
+
+```bash
+curl -X POST https://api.opensink.com/api/v1/sinks/{sink_id}/items \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "My first item",
+    "body": "Hello from the OpenSink API"
+  }'
+```
+
+---
+
+## Error Handling
+
+OpenSink uses standard HTTP status codes.
+
+| Status | Meaning |
+|------|--------|
+| 200 | Success |
+| 201 | Created |
+| 400 | Invalid request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Not found |
+| 500 | Internal error |
+
+Error responses have the following shape:
+
+```json
+{
+  "error": "Human-readable error message"
+}
+```
+
+---
+
+## Idempotency & Safety
+
+- Item creation is append-only
+- Sessions are explicit and durable
+- Jobs are not auto-retried
+
+OpenSink favors **explicit state over implicit retries**.
+
+---
+
+## API Structure
+
+The API is organized around a small set of resources:
+
+<Columns cols={2}>
+  <Card title="Sinks & Items" icon="database">
+    Store and retrieve durable information.
+  </Card>
+
+  <Card title="Sessions" icon="layer-group">
+    Track agent execution and resumability.
+  </Card>
+
+  <Card title="Background Jobs" icon="clock">
+    Schedule execution without infrastructure.
+  </Card>
+
+  <Card title="Agents" icon="robot">
+    Configure and execute agent behavior.
+  </Card>
+</Columns>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create your first Sink" icon="droplet" href="/core-concepts/sinks">
+    Learn how to store information in OpenSink.
+  </Card>
+
+  <Card title="Run an agent" icon="play" href="/agents/sessions">
+    Execute and track an agent using Sessions.
+  </Card>
+</CardGroup>

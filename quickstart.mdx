@@ -1,0 +1,134 @@
+---
+title: "Quickstart"
+description: "Create an account, copy one command, and see your first item instantly."
+icon: "rocket"
+---
+
+## Get started in under a minute
+
+In this quickstart, you will:
+
+- create an OpenSink account
+- copy a single command
+- see your first Item appear instantly
+
+No setup. No SDK. No configuration.
+
+---
+
+<Steps>
+  <Step title="Create an OpenSink account">
+    OpenSink uses magic links — no passwords required.
+
+    1. Sign up at https://opensink.com
+    2. Create your first workspace
+    3. You'll land directly in your dashboard
+
+    That's it.
+
+    <Note>
+      When you sign up, OpenSink automatically creates a default Sink for you.
+
+      You can start sending data immediately.
+    </Note>
+  </Step>
+  <Step title="Copy the example command from your dashboard">
+    Your dashboard shows a ready-to-run example command.
+
+    It already includes:
+
+    - your API token
+    - your default Sink ID
+    - a valid payload
+
+    It looks like this:
+
+    ```bash
+    curl -X POST 'https://api.opensink.com/api/v1/sink-items'   -H 'Content-Type: application/json'   -H 'Authorization: Bearer YOUR_API_TOKEN'   -d '{
+        "sink_id": "YOUR_SINK_ID",
+        "title": "My first item",
+        "body": "This is the item body",
+        "type": "event",
+        "url": "https://example.com",
+        "fields": {
+          "foo": "bar"
+        }
+      }'
+    ```
+
+    Just copy it and run it.
+
+    <AccordionGroup>
+      <Accordion title="What is this doing?" icon="circle-info">
+        This command sends a single Item to OpenSink.
+
+        OpenSink:
+
+        <ul>
+        <li>authenticates the request</li>
+        <li>writes the Item to your Sink</li>
+        <li>indexes it for search</li>
+        <li>makes it visible in the UI</li>
+        </ul>
+      </Accordion>
+    </AccordionGroup>
+  </Step>
+  <Step title="See the result instantly">
+    Go back to the OpenSink UI.
+
+    You'll see:
+
+    - your Item listed immediately
+    - timestamps and metadata
+    - searchable content
+
+    You've just completed the core OpenSink loop:
+
+    > **Code → OpenSink → UI**
+  </Step>
+</Steps>
+
+---
+
+## That's already enough to be useful
+
+At this point, you have:
+
+- a workspace
+- a Sink
+- a secure API token
+- a place to store and inspect information
+
+This works with:
+
+- AI agents
+- automation scripts
+- background jobs
+- any system that can make an HTTP request
+
+No framework required.
+
+---
+
+## Where to go next
+
+<CardGroup cols={2}>
+  <Card title="Sinks & Items" icon="database" href="/concepts/sinks">
+    Learn how OpenSink organizes information.
+  </Card>
+  <Card title="Sessions & resumable agents" icon="pause">
+    Pause agents, request input, and resume safely.
+  </Card>
+  <Card title="Jobs" icon="clock">
+    Run agents on a schedule without managing infrastructure.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Explore the full OpenSink API.
+  </Card>
+</CardGroup>
+
+<Note>
+  If you can send an HTTP request, you can use OpenSink.
+  <br />
+  Everything else is optional.
+</Note>

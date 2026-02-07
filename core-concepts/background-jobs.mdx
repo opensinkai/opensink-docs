@@ -1,0 +1,264 @@
+---
+title: "Background Jobs"
+description: "Run agents and automations on a schedule without managing infrastructure."
+icon: timer
+---
+
+## What are Background Jobs?
+
+<Info>
+Background Jobs are OpenSink’s built-in scheduling mechanism.  
+They let you trigger HTTP endpoints on a fixed interval — reliably, visibly, and without running your own cron infrastructure.
+</Info>
+
+Background Jobs exist to remove one of the most painful parts of automation:
+
+> *“Where do I host this cron, why didn’t it run, and how do I debug it?”*
+
+OpenSink handles scheduling, execution tracking, and visibility — **you own the logic**.
+
+---
+
+## What Background Jobs Are (and Aren’t)
+
+<Columns cols={2}>
+  <Card title="What they are" icon="check">
+    <ul>
+      <li>Reliable HTTP schedulers</li>
+      <li>Minutes-based intervals</li>
+      <li>Inspectable execution history</li>
+      <li>Agent- and automation-friendly</li>
+    </ul>
+  </Card>
+
+  <Card title="What they are not" icon="xmark">
+    <ul>
+      <li>Workflow engines</li>
+      <li>Code execution environments</li>
+      <li>Task queues</li>
+      <li>Event processors</li>
+    </ul>
+  </Card>
+</Columns>
+
+Background Jobs **trigger work** — they don’t perform it.
+
+---
+
+## Typical Use Cases
+
+<Columns cols={3}>
+  <Card title="AI Agents" icon="robot">
+    Periodically run an agent:
+    <ul>
+      <li>Daily research</li>
+      <li>Market scanning</li>
+      <li>Monitoring tasks</li>
+    </ul>
+  </Card>
+
+  <Card title="Automation" icon="bolt">
+    Trigger internal systems:
+    <ul>
+      <li>Sync data</li>
+      <li>Refresh caches</li>
+      <li>Poll APIs</li>
+    </ul>
+  </Card>
+
+  <Card title="Reporting" icon="chart-line">
+    Generate outputs on a schedule:
+    <ul>
+      <li>Daily summaries</li>
+      <li>Status reports</li>
+      <li>Health checks</li>
+    </ul>
+  </Card>
+</Columns>
+
+---
+
+## How Scheduling Works
+
+OpenSink uses **simple, opinionated scheduling** — not cron strings.
+
+<Info>
+This is intentional. Cron expressions are powerful, but they allow unsafe patterns (every second, overlapping runs, etc.).
+</Info>
+
+Each job defines:
+
+- **Interval (minutes)**  
+- **Start minute** (alignment within the hour)
+
+### Examples
+
+| Interval | Start minute | Runs at |
+|--------|--------------|--------|
+| 15 min | 0 | 00, 15, 30, 45 |
+| 30 min | 5 | 05, 35 |
+| 60 min | 0 | Every hour |
+| 120 min | 10 | Every 2 hours, at :10 |
+
+This keeps scheduling predictable and safe.
+
+---
+
+## Configuring a Job
+
+<Steps>
+  <Step title="Name your job">
+    Give it a human-readable name so you can recognize it later.
+  </Step>
+
+  <Step title="Choose schedule">
+    <ul>
+      <li>Interval (minutes)</li>
+      <li>Start minute</li>
+    </ul>
+  </Step>
+
+  <Step title="Define the HTTP request">
+    Configure:
+    <ul>
+      <li>Request URL</li>
+      <li>HTTP method</li>
+      <li>Headers (optional)</li>
+      <li>Body (optional)</li>
+    </ul>
+  </Step>
+
+  <Step title="Enable or disable">
+    Jobs can be paused instantly without deleting them.
+  </Step>
+</Steps>
+
+---
+
+## Execution Visibility
+
+Every time a job runs, OpenSink records a **Job Run**.
+
+<Columns cols={2}>
+  <Card title="What you can see" icon="eye">
+    <ul>
+      <li>Run status (success / failure)</li>
+      <li>Execution time</li>
+      <li>HTTP response status</li>
+      <li>Error messages</li>
+    </ul>
+  </Card>
+
+  <Card title="Why this matters" icon="lightbulb">
+    <ul>
+      <li>No silent failures</li>
+      <li>No guesswork</li>
+      <li>Clear audit trail</li>
+      <li>Easy debugging</li>
+    </ul>
+  </Card>
+</Columns>
+
+Each job shows:
+- total runs
+- successful runs
+- failed runs
+- last run time
+- next scheduled run
+
+---
+
+## Jobs + Sessions (How They Work Together)
+
+<Note>
+Jobs and Sessions are complementary, not overlapping.
+</Note>
+
+A common pattern:
+
+1. Background Job runs on a schedule
+2. Job calls your agent’s execution endpoint
+3. Agent creates or resumes a Session
+4. Session produces Items or requests input
+
+Jobs **trigger execution**  
+Sessions **record execution**
+
+---
+
+## Example: Daily Trading Agent
+
+<Steps>
+  <Step title="Create a Background Job">
+    Runs every morning at 09:00.
+  </Step>
+
+  <Step title="Job calls agent endpoint">
+    The job triggers:
+    <code>POST /agents/trading-bot/execute</code>
+  </Step>
+
+  <Step title="Agent logic runs">
+    <ul>
+      <li>Fetches market news</li>
+      <li>Analyzes signals</li>
+      <li>Creates a Session</li>
+    </ul>
+  </Step>
+
+  <Step title="Session requests approval">
+    Agent pauses and waits for human confirmation.
+  </Step>
+</Steps>
+
+This entire flow runs **without servers, cron, or schedulers** on your side.
+
+---
+
+## Design Principles
+
+<Info>
+Background Jobs are intentionally constrained.
+</Info>
+
+They:
+- only schedule HTTP calls
+- do not execute user code
+- do not manage retries or workflows
+- do not interpret responses
+
+This keeps them:
+- reliable
+- debuggable
+- predictable
+
+---
+
+## When to Use Background Jobs
+
+Use Jobs when:
+- execution must happen on a schedule
+- reliability matters
+- visibility matters
+- you don’t want to manage cron
+
+Don’t use Jobs when:
+- execution is event-driven
+- you need real-time guarantees
+- you’re orchestrating workflows
+
+---
+
+## Summary
+
+<Columns cols={2}>
+  <Card title="Background Jobs" icon="clock">
+    Reliable, visible schedulers that trigger work.
+  </Card>
+
+  <Card title="Sessions" icon="layer-group">
+    Durable execution records that track what happened.
+  </Card>
+</Columns>
+
+Together, they let you build **production-grade agents** without infrastructure overhead.

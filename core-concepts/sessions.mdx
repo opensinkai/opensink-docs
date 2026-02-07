@@ -1,0 +1,229 @@
+---
+title: "Sessions"
+description: "Durable execution records for AI agents — resumable, inspectable, and human-aware."
+icon: "arrow-up-big-small"
+---
+
+## What is a Session?
+
+A **Session** represents a single execution attempt of an agent.
+
+It answers questions like:
+
+- Did my agent run?
+- Is it running, waiting, completed, or failed?
+- What state did it produce?
+- Is it waiting for human input?
+- What happened during this run?
+
+A Session is **not**:
+
+- a conversation
+- a workflow
+- a background job
+- a LangChain run
+
+A Session is an **explicit execution record**.
+
+<Info>
+  OpenSink never executes your agent. It only stores what happened during execution.
+</Info>
+
+---
+
+## Why Sessions exist
+
+Once agents move beyond experiments, teams need:
+
+<Columns cols={2}>
+  <Card title="Resumability" icon="rotate">
+    Pause execution, wait for input, and resume without losing state.
+  </Card>
+  <Card title="Visibility" icon="eye">
+    See what agents are doing, when they ran, and what they produced.
+  </Card>
+  <Card title="Control" icon="sliders">
+    Safely introduce human approval without rebuilding infrastructure.
+  </Card>
+  <Card title="Durability" icon="database">
+    Persist state outside memory, processes, and prompts.
+  </Card>
+</Columns>
+
+Sessions provide this without introducing workflows, orchestration, or magic.
+
+---
+
+## Session lifecycle
+
+A Session progresses through a small, intentional state machine:
+
+<Steps>
+  <Step title="Created">
+    A new session is created when an agent begins execution.
+  </Step>
+  <Step title="Running">
+    The agent is actively executing.
+  </Step>
+  <Step title="Waiting for input">
+    Execution is paused, waiting for external input (e.g. human approval).
+  </Step>
+  <Step title="Completed">
+    Execution finished successfully or failed.
+  </Step>
+</Steps>
+
+---
+
+## Session state
+
+Each Session contains a **state object**.
+
+This state:
+
+- is controlled entirely by the agent
+- persists across pauses and restarts
+- is not interpreted by OpenSink
+
+Example:
+
+```json
+{
+  "portfolio_risk": "medium",
+  "proposed_trades": [
+    { "ticker": "AAPL", "amount": 5000 },
+    { "ticker": "MSFT", "amount": 3000 }
+  ]
+}
+```
+
+<Note>
+  State is not memory injection. It is durable system state owned by the agent.
+</Note>
+
+---
+
+## Requesting input (human-in-the-loop)
+
+Agents can pause execution and request input.
+
+This is how OpenSink enables:
+
+- approvals
+- confirmations
+- parameter selection
+- safe execution
+
+### Example request
+
+```json
+{
+  "key": "approve_trades",
+  "message": "Approve the following trades",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "approved": {
+        "type": "boolean",
+        "title": "Approve all trades?"
+      }
+    },
+    "required": ["approved"]
+  }
+}
+```
+
+When a request exists:
+
+- the Session enters `waiting_for_input`
+- OpenSink renders a UI from the schema
+- execution stops
+
+---
+
+## Resuming execution
+
+When input is submitted:
+
+- OpenSink stores the response
+- OpenSink calls your agent’s execution endpoint
+- your agent loads the Session
+- execution continues from state
+
+OpenSink does **not**:
+
+- branch logic
+- decide outcomes
+- execute steps
+
+---
+
+## Execution contract
+
+Each agent exposes **one execution endpoint**:
+
+```http
+POST /agents/:agent_id/execute
+```
+
+Execution logic inside your agent:
+
+```ts
+if (!session) {
+  session = createSession()
+}
+
+if (session.waiting_for_input) {
+  handleInput(session)
+} else {
+  runNextStep(session)
+}
+```
+
+This keeps control inside your code — not the platform.
+
+---
+
+## Example: Trading agent
+
+<Card title="Risk, Money, and Trading" icon="chart-line">
+  A trading agent that:
+
+  - reads market news
+  - proposes trades
+  - waits for approval
+  - executes safely
+
+  Sessions enable:
+
+  - resumable execution
+  - approval checkpoints
+  - auditability
+
+  Without workflows, queues, or orchestration engines.
+</Card>
+
+---
+
+## What Sessions intentionally do not do
+
+❌ Orchestrate steps\
+❌ Execute jobs\
+❌ Inject memory\
+❌ Define workflows\
+❌ Replace agent frameworks
+
+Sessions stay simple so your agents stay powerful.
+
+---
+
+## When to use Sessions
+
+Use Sessions when:
+
+- agents run in the real world
+- humans must approve actions
+- execution must be resumable
+- failures must be visible
+
+If agents matter — Sessions belong.
