@@ -935,7 +935,7 @@
         "operationId": "listSinkItems",
         "summary": "List Sink Items",
         "tags": [
-          "SinkItem"
+          "Sink Item"
         ],
         "description": "List or search items. Use q for full-text search, sink_id to filter by sink. Supports trail-based pagination.\n\nRequired scope: `sink_items:read`, `sink_items:all`, or `all:all`",
         "parameters": [
@@ -1098,10 +1098,10 @@
         }
       },
       "post": {
-        "operationId": "createSinkItem",
+        "operationId": "createSink Item",
         "summary": "Create Sink Item",
         "tags": [
-          "SinkItem"
+          "Sink Item"
         ],
         "description": "Create a new sink item.\n\nRequired scope: `sink_items:write`, `sink_items:all`, or `all:all`",
         "requestBody": {
@@ -1360,7 +1360,7 @@
         "operationId": "createManySinkItems",
         "summary": "Bulk Create Sink Items",
         "tags": [
-          "SinkItem"
+          "Sink Item"
         ],
         "description": "Create multiple sink items at once. If any item is invalid, no items are created.",
         "requestBody": {
@@ -1632,10 +1632,10 @@
     },
     "/api/v1/sink-items/{id}": {
       "get": {
-        "operationId": "getSinkItem",
+        "operationId": "getSink Item",
         "summary": "Get Sink Item",
         "tags": [
-          "SinkItem"
+          "Sink Item"
         ],
         "description": "Get a sink item by ID\n\nRequired scope: `sink_items:read`, `sink_items:all`, or `all:all`",
         "parameters": [
@@ -1646,7 +1646,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "SinkItem ID"
+            "description": "Sink Item ID"
           }
         ],
         "responses": {
@@ -1773,10 +1773,10 @@
         }
       },
       "patch": {
-        "operationId": "updateSinkItem",
+        "operationId": "updateSink Item",
         "summary": "Update Sink Item",
         "tags": [
-          "SinkItem"
+          "Sink Item"
         ],
         "description": "Update a sink item\n\nRequired scope: `sink_items:write`, `sink_items:all`, or `all:all`",
         "requestBody": {
@@ -1832,7 +1832,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "SinkItem ID"
+            "description": "Sink Item ID"
           }
         ],
         "responses": {
@@ -1975,10 +1975,10 @@
         }
       },
       "delete": {
-        "operationId": "deleteSinkItem",
+        "operationId": "deleteSink Item",
         "summary": "Delete Sink Item",
         "tags": [
-          "SinkItem"
+          "Sink Item"
         ],
         "description": "Delete a sink item\n\nRequired scope: `sink_items:write`, `sink_items:all`, or `all:all`",
         "parameters": [
@@ -1989,7 +1989,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "SinkItem ID"
+            "description": "Sink Item ID"
           }
         ],
         "responses": {
@@ -2118,10 +2118,10 @@
     },
     "/api/v1/cron-jobs": {
       "get": {
-        "operationId": "listCronJobs",
+        "operationId": "listCron Jobs",
         "summary": "List Cron Jobs",
         "tags": [
-          "CronJob"
+          "Cron Job"
         ],
         "description": "List all cron jobs in the current workspace\n\nRequired scope: `cron_jobs:read`, `cron_jobs:all`, or `all:all`",
         "responses": {
@@ -2283,10 +2283,10 @@
         }
       },
       "post": {
-        "operationId": "createCronJob",
+        "operationId": "createCron Job",
         "summary": "Create Cron Job",
         "tags": [
-          "CronJob"
+          "Cron Job"
         ],
         "description": "Create a new cron job\n\nRequired scope: `cron_jobs:write`, `cron_jobs:all`, or `all:all`",
         "requestBody": {
@@ -2628,10 +2628,10 @@
     },
     "/api/v1/cron-jobs/{id}": {
       "get": {
-        "operationId": "getCronJob",
+        "operationId": "getCron Job",
         "summary": "Get Cron Job",
         "tags": [
-          "CronJob"
+          "Cron Job"
         ],
         "description": "Get a cron job by ID\n\nRequired scope: `cron_jobs:read`, `cron_jobs:all`, or `all:all`",
         "parameters": [
@@ -2642,7 +2642,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "CronJob ID"
+            "description": "Cron Job ID"
           }
         ],
         "responses": {
@@ -2807,10 +2807,10 @@
         }
       },
       "patch": {
-        "operationId": "updateCronJob",
+        "operationId": "updateCron Job",
         "summary": "Update Cron Job",
         "tags": [
-          "CronJob"
+          "Cron Job"
         ],
         "description": "Update a cron job\n\nRequired scope: `cron_jobs:write`, `cron_jobs:all`, or `all:all`",
         "requestBody": {
@@ -2880,7 +2880,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "CronJob ID"
+            "description": "Cron Job ID"
           }
         ],
         "responses": {
@@ -3061,10 +3061,10 @@
         }
       },
       "delete": {
-        "operationId": "deleteCronJob",
+        "operationId": "deleteCron Job",
         "summary": "Delete Cron Job",
         "tags": [
-          "CronJob"
+          "Cron Job"
         ],
         "description": "Delete a cron job\n\nRequired scope: `cron_jobs:write`, `cron_jobs:all`, or `all:all`",
         "parameters": [
@@ -3075,7 +3075,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "CronJob ID"
+            "description": "Cron Job ID"
           }
         ],
         "responses": {
@@ -3245,7 +3245,7 @@
         "operationId": "listCronJobRuns",
         "summary": "List Cron Job Runs",
         "tags": [
-          "CronJobRun"
+          "Cron Job Run"
         ],
         "description": "List execution history. Use job_id to filter by a specific cron job.",
         "parameters": [
@@ -3376,10 +3376,10 @@
     },
     "/api/v1/cron-job-runs/{id}": {
       "get": {
-        "operationId": "getCronJobRun",
+        "operationId": "getCron Job Run",
         "summary": "Get Cron Job Run",
         "tags": [
-          "CronJobRun"
+          "Cron Job Run"
         ],
         "description": "Get details of a specific run\n\nRequired scope: `cron_job_runs:read`, `cron_job_runs:all`, or `all:all`",
         "parameters": [
@@ -3390,7 +3390,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "CronJobRun ID"
+            "description": "Cron Job Run ID"
           }
         ],
         "responses": {
@@ -4580,7 +4580,7 @@
         "operationId": "listAgentConfigurations",
         "summary": "List Agent Configurations",
         "tags": [
-          "AgentConfig"
+          "Agent Config"
         ],
         "description": "List all config versions. Optionally filter by agent_id or variant.\n\nRequired scope: `agent_configs:read`, `agent_configs:all`, or `all:all`",
         "parameters": [
@@ -4734,7 +4734,7 @@
         "operationId": "createAgentConfiguration",
         "summary": "Create Agent Configuration",
         "tags": [
-          "AgentConfig"
+          "Agent Config"
         ],
         "description": "Create a new configuration version for an agent\n\nRequired scope: `agent_configs:write`, `agent_configs:all`, or `all:all`",
         "requestBody": {
@@ -4954,7 +4954,7 @@
         "operationId": "listAgentConfigurationVariants",
         "summary": "List Agent Configuration Variants",
         "tags": [
-          "AgentConfig"
+          "Agent Config"
         ],
         "description": "List latest config for each variant. Optionally filter by agent_id.",
         "parameters": [
@@ -5049,7 +5049,7 @@
         "operationId": "getActiveAgentConfiguration",
         "summary": "Get Active Agent Configuration",
         "tags": [
-          "AgentConfig"
+          "Agent Config"
         ],
         "description": "Get the current active configuration for an agent",
         "parameters": [
@@ -5132,7 +5132,7 @@
         "operationId": "getAgentConfiguration",
         "summary": "Get Agent Configuration",
         "tags": [
-          "AgentConfig"
+          "Agent Config"
         ],
         "description": "Get a specific configuration by ID\n\nRequired scope: `agent_configs:read`, `agent_configs:all`, or `all:all`",
         "parameters": [
@@ -5143,7 +5143,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentConfig ID"
+            "description": "Agent Config ID"
           }
         ],
         "responses": {
@@ -5263,7 +5263,7 @@
         "operationId": "listAgentSessions",
         "summary": "List Agent Sessions",
         "tags": [
-          "AgentSession"
+          "Agent Session"
         ],
         "description": "List all sessions. Optionally filter by agent_id or status.\n\nRequired scope: `agent_sessions:read`, `agent_sessions:all`, or `all:all`",
         "parameters": [
@@ -5447,7 +5447,7 @@
         "operationId": "createAgentSession",
         "summary": "Create Agent Session",
         "tags": [
-          "AgentSession"
+          "Agent Session"
         ],
         "description": "Create a new session for an agent\n\nRequired scope: `agent_sessions:write`, `agent_sessions:all`, or `all:all`",
         "requestBody": {
@@ -5681,7 +5681,7 @@
         "operationId": "getAgentSession",
         "summary": "Get Agent Session",
         "tags": [
-          "AgentSession"
+          "Agent Session"
         ],
         "description": "Get a specific session by ID\n\nRequired scope: `agent_sessions:read`, `agent_sessions:all`, or `all:all`",
         "parameters": [
@@ -5692,7 +5692,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSession ID"
+            "description": "Agent Session ID"
           }
         ],
         "responses": {
@@ -5814,7 +5814,7 @@
         "operationId": "updateAgentSession",
         "summary": "Update Agent Session",
         "tags": [
-          "AgentSession"
+          "Agent Session"
         ],
         "description": "Update a session\n\nRequired scope: `agent_sessions:write`, `agent_sessions:all`, or `all:all`",
         "requestBody": {
@@ -5862,7 +5862,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSession ID"
+            "description": "Agent Session ID"
           }
         ],
         "responses": {
@@ -6000,7 +6000,7 @@
         "operationId": "deleteAgentSession",
         "summary": "Delete Agent Session",
         "tags": [
-          "AgentSession"
+          "Agent Session"
         ],
         "description": "Delete a session\n\nRequired scope: `agent_sessions:write`, `agent_sessions:all`, or `all:all`",
         "parameters": [
@@ -6011,7 +6011,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSession ID"
+            "description": "Agent Session ID"
           }
         ],
         "responses": {
@@ -6135,7 +6135,7 @@
         "operationId": "listAgentSessionInputRequests",
         "summary": "List Agent Session Input Requests",
         "tags": [
-          "AgentSessionInputRequest"
+          "Agent Session Input Request"
         ],
         "description": "List all input requests. Optionally filter by session_id, agent_id, or status.\n\nRequired scope: `agent_session_input_requests:read`, `agent_session_input_requests:all`, or `all:all`",
         "parameters": [
@@ -6320,7 +6320,7 @@
         "operationId": "createAgentSessionInputRequest",
         "summary": "Create Agent Session Input Request",
         "tags": [
-          "AgentSessionInputRequest"
+          "Agent Session Input Request"
         ],
         "description": "Create a new input request for a session\n\nRequired scope: `agent_session_input_requests:write`, `agent_session_input_requests:all`, or `all:all`",
         "requestBody": {
@@ -6616,7 +6616,7 @@
         "operationId": "getAgentSessionInputRequest",
         "summary": "Get Agent Session Input Request",
         "tags": [
-          "AgentSessionInputRequest"
+          "Agent Session Input Request"
         ],
         "description": "Get a specific input request by ID\n\nRequired scope: `agent_session_input_requests:read`, `agent_session_input_requests:all`, or `all:all`",
         "parameters": [
@@ -6627,7 +6627,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSessionInputRequest ID"
+            "description": "Agent Session Input Request ID"
           }
         ],
         "responses": {
@@ -6762,7 +6762,7 @@
         "operationId": "deleteAgentSessionInputRequest",
         "summary": "Delete Agent Session Input Request",
         "tags": [
-          "AgentSessionInputRequest"
+          "Agent Session Input Request"
         ],
         "description": "Delete an input request\n\nRequired scope: `agent_session_input_requests:write`, `agent_session_input_requests:all`, or `all:all`",
         "parameters": [
@@ -6773,7 +6773,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSessionInputRequest ID"
+            "description": "Agent Session Input Request ID"
           }
         ],
         "responses": {
@@ -6910,7 +6910,7 @@
         "operationId": "resolveAgentSessionInputRequest",
         "summary": "Resolve Agent Session Input Request",
         "tags": [
-          "AgentSessionInputRequest"
+          "Agent Session Input Request"
         ],
         "description": "Submit a response to resolve an input request",
         "requestBody": {
@@ -7029,7 +7029,7 @@
         "operationId": "listAgentSessionActivities",
         "summary": "List Agent Session Activities",
         "tags": [
-          "AgentSessionActivity"
+          "Agent Session Activity"
         ],
         "description": "List all activities. Optionally filter by session_id, agent_id, type, or source.\n\nRequired scope: `agent_session_activities:read`, `agent_session_activities:all`, or `all:all`",
         "parameters": [
@@ -7261,7 +7261,7 @@
         "operationId": "createAgentSessionActivity",
         "summary": "Create Agent Session Activity",
         "tags": [
-          "AgentSessionActivity"
+          "Agent Session Activity"
         ],
         "description": "Create a new activity for a session\n\nRequired scope: `agent_session_activities:write`, `agent_session_activities:all`, or `all:all`",
         "requestBody": {
@@ -7618,7 +7618,7 @@
         "operationId": "getAgentSessionActivity",
         "summary": "Get Agent Session Activity",
         "tags": [
-          "AgentSessionActivity"
+          "Agent Session Activity"
         ],
         "description": "Get a specific activity by ID\n\nRequired scope: `agent_session_activities:read`, `agent_session_activities:all`, or `all:all`",
         "parameters": [
@@ -7629,7 +7629,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSessionActivity ID"
+            "description": "Agent Session Activity ID"
           }
         ],
         "responses": {
@@ -7791,7 +7791,7 @@
         "operationId": "deleteAgentSessionActivity",
         "summary": "Delete Agent Session Activity",
         "tags": [
-          "AgentSessionActivity"
+          "Agent Session Activity"
         ],
         "description": "Delete an activity\n\nRequired scope: `agent_session_activities:write`, `agent_session_activities:all`, or `all:all`",
         "parameters": [
@@ -7802,7 +7802,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "description": "AgentSessionActivity ID"
+            "description": "Agent Session Activity ID"
           }
         ],
         "responses": {
@@ -7979,15 +7979,15 @@
       "description": "Sink management endpoints"
     },
     {
-      "name": "SinkItem",
+      "name": "Sink Item",
       "description": "Sink item endpoints"
     },
     {
-      "name": "CronJob",
+      "name": "Cron Job",
       "description": "Cron job scheduling endpoints"
     },
     {
-      "name": "CronJobRun",
+      "name": "Cron Job Run",
       "description": "Cron job execution history"
     },
     {
@@ -7995,19 +7995,19 @@
       "description": "Agent management endpoints"
     },
     {
-      "name": "AgentConfig",
+      "name": "Agent Config",
       "description": "Agent configuration endpoints"
     },
     {
-      "name": "AgentSession",
+      "name": "Agent Session",
       "description": "Agent session endpoints"
     },
     {
-      "name": "AgentSessionInputRequest",
+      "name": "Agent Session Input Request",
       "description": "Agent session input request endpoints"
     },
     {
-      "name": "AgentSessionActivity",
+      "name": "Agent Session Activity",
       "description": "Agent session activity log endpoints"
     }
   ]
