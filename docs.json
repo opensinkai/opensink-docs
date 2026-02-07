@@ -18,15 +18,15 @@
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "javascript-client",
             ]
           },
           {
             "group": "Core Concepts",
             "pages": [
               "core-concepts/agents",
-              "core-concepts/sinks",
               "core-concepts/sessions",
+              "core-concepts/sinks",
               "core-concepts/background-jobs"
             ]
           },

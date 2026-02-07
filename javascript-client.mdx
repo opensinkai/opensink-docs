@@ -1,0 +1,193 @@
+---
+title: "JavaScript Client"
+description: "Official JavaScript/TypeScript client for the OpenSink API."
+icon: "js"
+---
+
+## Installation
+
+```bash
+npm install opensink
+# or
+yarn add opensink
+```
+
+---
+
+## Setup
+
+```typescript
+import Opensink from 'opensink';
+
+const client = new Opensink({
+  apiKey: 'your-api-key',
+});
+```
+
+| Option | Description |
+| --- | --- |
+| `apiKey` | Your OpenSink API key (required) |
+| `url` | API base URL (defaults to `https://api.opensink.com`) |
+
+---
+
+## Resources
+
+The client exposes one property per resource. Each resource provides standard CRUD methods (`create`, `list`, `get`, `update`, `delete`) plus resource-specific methods where applicable.
+
+### `client.sinks`
+
+Manage [Sinks](/core-concepts/sinks) — named containers for agent-produced information.
+
+```typescript
+const { data: sink } = await client.sinks.create({
+  name: 'research-results',
+  description: 'Summaries from research agent',
+});
+
+const { data: { items } } = await client.sinks.list();
+```
+
+---
+
+### `client.sinkItems`
+
+Manage [Items](/core-concepts/sinks) — structured records written to sinks.
+
+```typescript
+const { data: item } = await client.sinkItems.create({
+  sink_id: 'sink-id',
+  title: 'Apple stock drops 3%',
+  body: 'Shares fell after earnings missed expectations.',
+  type: 'event',
+  fields: { ticker: 'AAPL', change_percent: -3 },
+});
+```
+
+Additional methods:
+
+| Method | Description |
+| --- | --- |
+| `createMany(items)` | Bulk create multiple items at once |
+
+---
+
+### `client.agents`
+
+Manage [Agents](/core-concepts/agents) — registered AI agents with status tracking.
+
+```typescript
+const { data: agent } = await client.agents.create({
+  name: 'research-agent',
+  description: 'Gathers and summarizes research',
+});
+```
+
+---
+
+### `client.agentConfigurations`
+
+Manage [Configurations](/agents/configurations) — versioned, schema-validated agent settings.
+
+```typescript
+const { data: config } = await client.agentConfigurations.create({
+  agent_id: 'agent-id',
+  variant: 'default',
+  schema: { type: 'object', properties: { model: { type: 'string' } } },
+  value: { model: 'gpt-4o' },
+});
+```
+
+Additional methods:
+
+| Method | Description |
+| --- | --- |
+| `getActiveForAgent(agentId)` | Get the current active configuration for an agent |
+| `listVariants(agentId?)` | List the latest config for each variant |
+| `listConfigs(params?)` | List configurations with filters (`agent_id`, `variant`) |
+
+---
+
+### `client.agentSessions`
+
+Manage [Sessions](/core-concepts/sessions) — durable execution records.
+
+```typescript
+const { data: session } = await client.agentSessions.create({
+  agent_id: 'agent-id',
+  status: 'running',
+  state: { step: 'init' },
+  metadata: { triggered_by: 'cron' },
+});
+
+await client.agentSessions.update('session-id', {
+  status: 'completed',
+});
+```
+
+---
+
+### `client.agentSessionInputRequests`
+
+Manage [Input Requests](/agents/input-requests) — human-in-the-loop prompts.
+
+```typescript
+const { data: request } = await client.agentSessionInputRequests.create({
+  session_id: 'session-id',
+  agent_id: 'agent-id',
+  key: 'approval',
+  title: 'Approve purchase',
+  message: 'Agent wants to purchase 100 units. Approve?',
+  schema: { type: 'object', properties: { approved: { type: 'boolean' } } },
+});
+```
+
+Additional methods:
+
+| Method | Description |
+| --- | --- |
+| `resolve(id, response)` | Submit a response to resolve an input request |
+| `listRequests(params?)` | List requests with filters (`session_id`, `status`) |
+
+---
+
+### `client.agentSessionActivities`
+
+Manage [Activities](/agents/activities) — structured session event logs.
+
+```typescript
+const { data: activity } = await client.agentSessionActivities.create({
+  session_id: 'session-id',
+  agent_id: 'agent-id',
+  type: 'message',
+  source: 'agent',
+  message: 'Started processing batch',
+});
+```
+
+Additional methods:
+
+| Method | Description |
+| --- | --- |
+| `listActivities(params?)` | List activities with filters (`session_id`, `type`, `source`) |
+
+---
+
+## Pagination
+
+List endpoints return paginated results using trail-based pagination:
+
+```typescript
+// First page
+const { data: page1 } = await client.sinkItems.list({ $limit: 20 });
+
+// Next page
+if (page1.trail) {
+  const { data: page2 } = await client.sinkItems.list({
+    $limit: 20,
+    $trail: page1.trail,
+  });
+}
+```
+
+All `list` methods accept `$limit` (max items per page, default 50) and `$trail` (cursor from a previous response).
