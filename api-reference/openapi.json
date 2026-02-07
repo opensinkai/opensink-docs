@@ -23,7 +23,7 @@
         "tags": [
           "Sink"
         ],
-        "description": "List all sinks in the current workspace\n\nRequired scope: `sinks:read`",
+        "description": "List all sinks in the current workspace\n\nRequired scope: `sinks:read`, `sinks:all`, or `all:all`",
         "responses": {
           "200": {
             "description": "Default Response",
@@ -157,7 +157,7 @@
         "tags": [
           "Sink"
         ],
-        "description": "Create a new sink\n\nRequired scope: `sinks:write`",
+        "description": "Create a new sink\n\nRequired scope: `sinks:write`, `sinks:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -427,7 +427,7 @@
         "tags": [
           "Sink"
         ],
-        "description": "Get a sink by ID\n\nRequired scope: `sinks:read`",
+        "description": "Get a sink by ID\n\nRequired scope: `sinks:read`, `sinks:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -575,7 +575,7 @@
         "tags": [
           "Sink"
         ],
-        "description": "Update a sink\n\nRequired scope: `sinks:write`",
+        "description": "Update a sink\n\nRequired scope: `sinks:write`, `sinks:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -787,7 +787,7 @@
         "tags": [
           "Sink"
         ],
-        "description": "Delete a sink\n\nRequired scope: `sinks:write`",
+        "description": "Delete a sink\n\nRequired scope: `sinks:write`, `sinks:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -937,7 +937,7 @@
         "tags": [
           "SinkItem"
         ],
-        "description": "List or search items. Use q for full-text search, sink_id to filter by sink. Supports trail-based pagination.\n\nRequired scope: `sink_items:read`",
+        "description": "List or search items. Use q for full-text search, sink_id to filter by sink. Supports trail-based pagination.\n\nRequired scope: `sink_items:read`, `sink_items:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -1103,7 +1103,7 @@
         "tags": [
           "SinkItem"
         ],
-        "description": "Create a new sink item.\n\nRequired scope: `sink_items:write`",
+        "description": "Create a new sink item.\n\nRequired scope: `sink_items:write`, `sink_items:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1362,7 +1362,7 @@
         "tags": [
           "SinkItem"
         ],
-        "description": "Create multiple sink items at once. If any item is invalid, no items are created.\n\nRequired scope: `sink_items:write`",
+        "description": "Create multiple sink items at once. If any item is invalid, no items are created.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1637,7 +1637,7 @@
         "tags": [
           "SinkItem"
         ],
-        "description": "Get a sink item by ID\n\nRequired scope: `sink_items:read`",
+        "description": "Get a sink item by ID\n\nRequired scope: `sink_items:read`, `sink_items:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -1778,7 +1778,7 @@
         "tags": [
           "SinkItem"
         ],
-        "description": "Update a sink item\n\nRequired scope: `sink_items:write`",
+        "description": "Update a sink item\n\nRequired scope: `sink_items:write`, `sink_items:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1980,7 +1980,7 @@
         "tags": [
           "SinkItem"
         ],
-        "description": "Delete a sink item\n\nRequired scope: `sink_items:write`",
+        "description": "Delete a sink item\n\nRequired scope: `sink_items:write`, `sink_items:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -2123,7 +2123,7 @@
         "tags": [
           "CronJob"
         ],
-        "description": "List all cron jobs in the current workspace\n\nRequired scope: ``",
+        "description": "List all cron jobs in the current workspace\n\nRequired scope: `cron_jobs:read`, `cron_jobs:all`, or `all:all`",
         "responses": {
           "200": {
             "description": "Default Response",
@@ -2288,7 +2288,7 @@
         "tags": [
           "CronJob"
         ],
-        "description": "Create a new cron job\n\nRequired scope: ``",
+        "description": "Create a new cron job\n\nRequired scope: `cron_jobs:write`, `cron_jobs:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2633,7 +2633,7 @@
         "tags": [
           "CronJob"
         ],
-        "description": "Get a cron job by ID\n\nRequired scope: ``",
+        "description": "Get a cron job by ID\n\nRequired scope: `cron_jobs:read`, `cron_jobs:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -2812,7 +2812,7 @@
         "tags": [
           "CronJob"
         ],
-        "description": "Update a cron job\n\nRequired scope: ``",
+        "description": "Update a cron job\n\nRequired scope: `cron_jobs:write`, `cron_jobs:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3066,7 +3066,7 @@
         "tags": [
           "CronJob"
         ],
-        "description": "Delete a cron job\n\nRequired scope: ``",
+        "description": "Delete a cron job\n\nRequired scope: `cron_jobs:write`, `cron_jobs:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -3247,7 +3247,7 @@
         "tags": [
           "CronJobRun"
         ],
-        "description": "List execution history. Use job_id to filter by a specific cron job.\n\nRequired scope: ``",
+        "description": "List execution history. Use job_id to filter by a specific cron job.",
         "parameters": [
           {
             "schema": {
@@ -3381,7 +3381,7 @@
         "tags": [
           "CronJobRun"
         ],
-        "description": "Get details of a specific run\n\nRequired scope: ``",
+        "description": "Get details of a specific run\n\nRequired scope: `cron_job_runs:read`, `cron_job_runs:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -3532,7 +3532,7 @@
         "tags": [
           "Agent"
         ],
-        "description": "List all agents in the workspace\n\nRequired scope: ``",
+        "description": "List all agents in the workspace\n\nRequired scope: `agents:read`, `agents:all`, or `all:all`",
         "responses": {
           "200": {
             "description": "Default Response",
@@ -3685,7 +3685,7 @@
         "tags": [
           "Agent"
         ],
-        "description": "Create a new agent\n\nRequired scope: ``",
+        "description": "Create a new agent\n\nRequired scope: `agents:write`, `agents:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4004,7 +4004,7 @@
         "tags": [
           "Agent"
         ],
-        "description": "Get an agent by ID\n\nRequired scope: ``",
+        "description": "Get an agent by ID\n\nRequired scope: `agents:read`, `agents:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -4171,7 +4171,7 @@
         "tags": [
           "Agent"
         ],
-        "description": "Update an agent\n\nRequired scope: ``",
+        "description": "Update an agent\n\nRequired scope: `agents:write`, `agents:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4413,7 +4413,7 @@
         "tags": [
           "Agent"
         ],
-        "description": "Delete an agent\n\nRequired scope: ``",
+        "description": "Delete an agent\n\nRequired scope: `agents:write`, `agents:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -4582,7 +4582,7 @@
         "tags": [
           "AgentConfig"
         ],
-        "description": "List all config versions. Optionally filter by agent_id or variant.\n\nRequired scope: ``",
+        "description": "List all config versions. Optionally filter by agent_id or variant.\n\nRequired scope: `agent_configs:read`, `agent_configs:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -4736,7 +4736,7 @@
         "tags": [
           "AgentConfig"
         ],
-        "description": "Create a new configuration version for an agent\n\nRequired scope: ``",
+        "description": "Create a new configuration version for an agent\n\nRequired scope: `agent_configs:write`, `agent_configs:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4956,7 +4956,7 @@
         "tags": [
           "AgentConfig"
         ],
-        "description": "List latest config for each variant. Optionally filter by agent_id.\n\nRequired scope: ``",
+        "description": "List latest config for each variant. Optionally filter by agent_id.",
         "parameters": [
           {
             "schema": {
@@ -5051,7 +5051,7 @@
         "tags": [
           "AgentConfig"
         ],
-        "description": "Get the current active configuration for an agent\n\nRequired scope: ``",
+        "description": "Get the current active configuration for an agent",
         "parameters": [
           {
             "schema": {
@@ -5134,7 +5134,7 @@
         "tags": [
           "AgentConfig"
         ],
-        "description": "Get a specific configuration by ID\n\nRequired scope: ``",
+        "description": "Get a specific configuration by ID\n\nRequired scope: `agent_configs:read`, `agent_configs:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -5265,7 +5265,7 @@
         "tags": [
           "AgentSession"
         ],
-        "description": "List all sessions. Optionally filter by agent_id or status.\n\nRequired scope: ``",
+        "description": "List all sessions. Optionally filter by agent_id or status.\n\nRequired scope: `agent_sessions:read`, `agent_sessions:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -5449,7 +5449,7 @@
         "tags": [
           "AgentSession"
         ],
-        "description": "Create a new session for an agent\n\nRequired scope: ``",
+        "description": "Create a new session for an agent\n\nRequired scope: `agent_sessions:write`, `agent_sessions:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -5683,7 +5683,7 @@
         "tags": [
           "AgentSession"
         ],
-        "description": "Get a specific session by ID\n\nRequired scope: ``",
+        "description": "Get a specific session by ID\n\nRequired scope: `agent_sessions:read`, `agent_sessions:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -5816,7 +5816,7 @@
         "tags": [
           "AgentSession"
         ],
-        "description": "Update a session\n\nRequired scope: ``",
+        "description": "Update a session\n\nRequired scope: `agent_sessions:write`, `agent_sessions:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -6002,7 +6002,7 @@
         "tags": [
           "AgentSession"
         ],
-        "description": "Delete a session\n\nRequired scope: ``",
+        "description": "Delete a session\n\nRequired scope: `agent_sessions:write`, `agent_sessions:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -6137,7 +6137,7 @@
         "tags": [
           "AgentSessionInputRequest"
         ],
-        "description": "List all input requests. Optionally filter by session_id, agent_id, or status.\n\nRequired scope: ``",
+        "description": "List all input requests. Optionally filter by session_id, agent_id, or status.\n\nRequired scope: `agent_session_input_requests:read`, `agent_session_input_requests:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -6322,7 +6322,7 @@
         "tags": [
           "AgentSessionInputRequest"
         ],
-        "description": "Create a new input request for a session\n\nRequired scope: ``",
+        "description": "Create a new input request for a session\n\nRequired scope: `agent_session_input_requests:write`, `agent_session_input_requests:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -6618,7 +6618,7 @@
         "tags": [
           "AgentSessionInputRequest"
         ],
-        "description": "Get a specific input request by ID\n\nRequired scope: ``",
+        "description": "Get a specific input request by ID\n\nRequired scope: `agent_session_input_requests:read`, `agent_session_input_requests:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -6764,7 +6764,7 @@
         "tags": [
           "AgentSessionInputRequest"
         ],
-        "description": "Delete an input request\n\nRequired scope: ``",
+        "description": "Delete an input request\n\nRequired scope: `agent_session_input_requests:write`, `agent_session_input_requests:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -6912,7 +6912,7 @@
         "tags": [
           "AgentSessionInputRequest"
         ],
-        "description": "Submit a response to resolve an input request\n\nRequired scope: ``",
+        "description": "Submit a response to resolve an input request",
         "requestBody": {
           "content": {
             "application/json": {
@@ -7031,7 +7031,7 @@
         "tags": [
           "AgentSessionActivity"
         ],
-        "description": "List all activities. Optionally filter by session_id, agent_id, type, or source.\n\nRequired scope: ``",
+        "description": "List all activities. Optionally filter by session_id, agent_id, type, or source.\n\nRequired scope: `agent_session_activities:read`, `agent_session_activities:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -7263,7 +7263,7 @@
         "tags": [
           "AgentSessionActivity"
         ],
-        "description": "Create a new activity for a session\n\nRequired scope: ``",
+        "description": "Create a new activity for a session\n\nRequired scope: `agent_session_activities:write`, `agent_session_activities:all`, or `all:all`",
         "requestBody": {
           "content": {
             "application/json": {
@@ -7620,7 +7620,7 @@
         "tags": [
           "AgentSessionActivity"
         ],
-        "description": "Get a specific activity by ID\n\nRequired scope: ``",
+        "description": "Get a specific activity by ID\n\nRequired scope: `agent_session_activities:read`, `agent_session_activities:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -7793,7 +7793,7 @@
         "tags": [
           "AgentSessionActivity"
         ],
-        "description": "Delete an activity\n\nRequired scope: ``",
+        "description": "Delete an activity\n\nRequired scope: `agent_session_activities:write`, `agent_session_activities:all`, or `all:all`",
         "parameters": [
           {
             "schema": {
@@ -7964,8 +7964,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3301",
-      "description": "Development server"
+      "url": "https://api.opensink.com",
+      "description": "Production Server"
     }
   ],
   "security": [
