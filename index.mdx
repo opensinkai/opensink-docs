@@ -1,51 +1,114 @@
 ---
-title: "Welcome to Opensink"
-description: "OpenSink centralizes important agent-generated data and lets you configure agent behavior through clear, inspectable APIs — on any platform."
+title: "Welcome to OpenSink"
+description: "Control and observe AI agents running in the real world."
 icon: "hand-wave"
 ---
 
-<Note>
-  OpenSink is **a platform that gives you the right tools to store important information produced by AI agents, and to build and manage your AI agents.** \*\*OpenSink is not \*\*an agent framework, an automation platform, OR a place where you can build AI agents.
-</Note>
+## What is OpenSink?
 
-## Built to work with every agent stack
+OpenSink is a **control layer for AI agents in production**.
+
+Once agents move beyond prototypes, teams run into the same problems:
+
+- Agent outputs get scattered across Slack, email, logs, and dashboards
+- There's no safe way to pause an agent, ask a human for approval, and resume
+- Changing agent behavior means redeploying code
+- Nobody can tell what an agent actually did, or why it failed
+
+OpenSink solves these by giving your agents a central place to **store results**, **track execution**, **request human input**, and **manage configuration** — all through simple HTTP APIs.
+
+It works with any framework, any language, and any platform. OpenSink does not run your agents or care how they're built. It just gives them the production infrastructure they're missing.
+
+<Tip>
+  **Example**: You build a trading agent that reads market news and proposes trades. With OpenSink, that agent can store its findings in a Sink, run inside a tracked Session, pause and ask a human to approve the trades via an Input Request, and resume execution automatically once approved — all without building any of that infrastructure yourself.
+</Tip>
+
+---
+
+## What OpenSink gives you
 
 <Columns cols={2}>
-  <Card title="Any agent framework" icon="puzzle-piece">
-    LangChain, custom agents, scripts, cron jobs, background workers — OpenSink does not care how your agent is built.
+  <Card title="Sessions" icon="arrow-up-big-small" href="/core-concepts/sessions">
+    Durable, resumable execution records. Track state, pause for human input, and resume without losing context.
   </Card>
-  <Card title="Any platform" icon="globe">
-    Cloud, serverless, containers, CI, local machines. No runtime coupling. Complete freedom over the tech stack.
+  <Card title="Human-in-the-loop" icon="message-question" href="/agents/input-requests">
+    Pause agents for approvals or input. Schema-driven forms render automatically. Execution resumes when the human responds.
+  </Card>
+  <Card title="Sinks & Items" icon="database" href="/core-concepts/sinks">
+    Named containers for agent-produced information. Store results, decisions, and findings — not logs, not metrics.
+  </Card>
+  <Card title="Configurations" icon="gear" href="/agents/configurations">
+    Versioned, schema-validated settings. Change agent behavior without redeploying. Full history and rollback.
+  </Card>
+  <Card title="Background Jobs" icon="clock" href="/core-concepts/background-jobs">
+    Scheduled HTTP triggers for periodic agent execution. No cron servers, no infrastructure to manage.
+  </Card>
+  <Card title="Visibility" icon="eye" href="/agents/activities">
+    Inspect, debug, and audit every agent execution. Activity timelines, state inspection, and full-text search.
   </Card>
 </Columns>
 
-## Problems OpenSink Solves
+---
 
-### Important information gets lost
+## How it works
 
-The important information produced by the AI agents and systems in getting lost in logs, emails, slack messages, whatsapp messages, etc., OpenSink gives you a place where you can store and immediately see the important information - not the noise, but the things that matter.
+OpenSink is a set of HTTP APIs. Your agent calls them during execution.
 
-<Tip>
-  **Example**: an agent that summarizes the important financial news every day for you - instead of sending slack messages, you can send it to an OpenSink "Sink". Once you do that, you can easily see the news in OpenSink, they become searchable, and you can go back and check them whenever you have to.
-</Tip>
+```
+Your agent runs → calls OpenSink APIs → OpenSink stores state, results, and activities
+```
 
-### Building AI agents that can pause work, ask for human input, and resume, is too complex.
+There is no SDK requirement, no runtime coupling, and no framework dependency.
 
-**Sessions** and \*\*Input Requests \*\*are here to help you solve this.
+If your code can make an HTTP request, it can use OpenSink.
 
-- A session holds allows you to store information so that you can resume an agent task easily.
-- In addition to that, it allows your agent to create an **Input Request** - a request for human intervention for important actions. Once the request is resolved by a human, it gets send to the agent so it can resume the work.
+---
 
-<Tip>
-  **Example**: a trading bot that analyzes the market and asks you for an approval to execute certain trades. It can allow you to approve/deny trades, or maybe even change the amount of the trade. This is completely flexible, and you can build any type of requests.
-</Tip>
+## Get started
 
-#### Managing background jobs is painful
+<Steps>
+  <Step title="Create an account">
+    Sign up at [opensink.com](https://opensink.com). Create a workspace. You'll land in your dashboard with a default Sink ready to go.
+  </Step>
+  <Step title="Send your first item">
+    Copy the example command from your dashboard and run it. Your first item appears instantly — searchable and inspectable.
+  </Step>
+  <Step title="Register an agent">
+    Create an agent, give it a configuration, and start running sessions. Log activities, request human input, and store results in sinks.
+  </Step>
+</Steps>
 
-Background jobs are an important part of the AI agents that have to run periodically, like news agents, trading agents, marketing agents, competitor analysis agents, etc.. OpenSink provides you an easy way to create background jobs that will call your endpoints based on your schedule. This works with any server, and is language agnostic.
-
-## Quickstart
-
-<Card title="Create our first Sink" icon="sparkles" href="/quickstart">
-  Create your first Sink, push your first Item, and run a resumable agent in minutes.
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Follow the step-by-step guide to go from zero to your first item in under a minute.
 </Card>
+
+---
+
+## Explore the platform
+
+<CardGroup cols={2}>
+  <Card title="Agents" icon="robot" href="/core-concepts/agents">
+    Register agents, track their status, and connect them to sessions, configs, and sinks.
+  </Card>
+  <Card title="Sessions" icon="arrow-up-big-small" href="/core-concepts/sessions">
+    Durable execution records with resumable state and human-in-the-loop support.
+  </Card>
+  <Card title="Sinks & Items" icon="database" href="/core-concepts/sinks">
+    Store and search the meaningful information your agents produce.
+  </Card>
+  <Card title="Configurations" icon="gear" href="/agents/configurations">
+    Versioned settings with schema validation, variants, and rollback.
+  </Card>
+  <Card title="Input Requests" icon="message-question" href="/agents/input-requests">
+    Pause agents for human approval with schema-driven forms.
+  </Card>
+  <Card title="Background Jobs" icon="clock" href="/core-concepts/background-jobs">
+    Schedule periodic agent execution with simple HTTP triggers.
+  </Card>
+  <Card title="Activities" icon="list-timeline" href="/agents/activities">
+    A structured timeline of everything that happens during a session.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Full HTTP API documentation with endpoint examples.
+  </Card>
+</CardGroup>

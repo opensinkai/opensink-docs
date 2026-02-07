@@ -1,0 +1,138 @@
+---
+title: "Use Cases"
+description: "Common patterns for using OpenSink with AI agents in production."
+icon: "lightbulb"
+---
+
+## What people build with OpenSink
+
+OpenSink is general-purpose — any agent that needs structure, visibility, or human interaction can use it. But certain patterns come up repeatedly.
+
+---
+
+## News & research monitoring
+
+An agent that runs periodically, collects information from external sources, and stores the results for later review.
+
+**How it works:**
+
+1. A [Background Job](/core-concepts/background-jobs) triggers the agent on a schedule
+2. The agent fetches data from APIs, RSS feeds, or web scraping
+3. An LLM filters, summarizes, or categorizes the results
+4. Important findings are stored as Items in a [Sink](/core-concepts/sinks)
+5. [Activities](/agents/activities) log what the agent did during each run
+
+**OpenSink primitives used:**
+
+| Primitive | Purpose |
+| --- | --- |
+| Sink & Items | Store curated results |
+| Sessions | Track each execution |
+| Configurations | Control what sources to monitor, how many results to keep |
+| Background Jobs | Trigger the agent on a schedule |
+
+---
+
+## Trading & financial agents
+
+An agent that analyzes market data, proposes actions, and waits for human approval before executing.
+
+**How it works:**
+
+1. The agent analyzes market conditions and proposes trades
+2. Proposals are stored in the [Session state](/core-concepts/sessions)
+3. An [Input Request](/agents/input-requests) pauses execution and asks for approval
+4. A human reviews and approves or rejects
+5. The agent resumes via its [Execution Endpoint](/agents/execution-endpoints) and executes approved actions
+6. Results are stored in a [Sink](/core-concepts/sinks)
+
+**OpenSink primitives used:**
+
+| Primitive | Purpose |
+| --- | --- |
+| Sessions | Track execution state and proposed trades |
+| Input Requests | Pause for human approval |
+| Execution Endpoints | Resume automatically after approval |
+| Sink & Items | Record executed trades |
+
+---
+
+## Content & report generation
+
+An agent that generates content — reports, summaries, emails — and optionally asks for review before publishing.
+
+**How it works:**
+
+1. The agent gathers source data and generates a draft
+2. The draft is stored in the Session state
+3. An Input Request asks a human to review and edit
+4. The agent publishes the final version and records it in a Sink
+
+**OpenSink primitives used:**
+
+| Primitive | Purpose |
+| --- | --- |
+| Sessions | Hold the draft state |
+| Input Requests | Get human review and edits |
+| Sink & Items | Store the published output |
+| Configurations | Control tone, length, audience, templates |
+
+---
+
+## Competitor & market analysis
+
+An agent that tracks competitor activity and surfaces changes worth knowing about.
+
+**How it works:**
+
+1. A Background Job triggers the agent daily or weekly
+2. The agent checks competitor websites, social media, or product pages
+3. An LLM identifies meaningful changes and generates summaries
+4. Results are written to a Sink, searchable and organized by competitor
+5. Configurations control which competitors to track and what to look for
+
+**OpenSink primitives used:**
+
+| Primitive | Purpose |
+| --- | --- |
+| Sink & Items | Store findings organized by competitor |
+| Background Jobs | Run on a schedule |
+| Configurations | Define competitors, sources, and focus areas |
+| Activities | Log what was checked and what changed |
+
+---
+
+## Alert & escalation agents
+
+An agent that monitors systems and escalates issues that require human attention.
+
+**How it works:**
+
+1. The agent monitors metrics, logs, or external services
+2. When something requires attention, it creates an Input Request
+3. A human triages the alert and provides instructions
+4. The agent acts on the response — acknowledges, escalates, or remediates
+5. All actions are logged as Activities for audit
+
+**OpenSink primitives used:**
+
+| Primitive | Purpose |
+| --- | --- |
+| Input Requests | Escalate issues that need human judgment |
+| Activities | Full audit trail of alerts and responses |
+| Sessions | Track the lifecycle of each incident |
+| Sink & Items | Record resolved incidents |
+
+---
+
+## Combining patterns
+
+Most real agents combine several of these patterns. A single agent might:
+
+- run on a schedule (Background Job)
+- fetch and analyze data (Session)
+- store results (Sink)
+- ask for approval on high-stakes actions (Input Request)
+- resume and execute (Execution Endpoint)
+
+OpenSink's primitives are composable. Use what you need, ignore what you don't.

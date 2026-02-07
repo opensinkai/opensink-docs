@@ -1,0 +1,49 @@
+---
+title: "Examples"
+description: "Working example agents you can run and learn from."
+icon: "code"
+---
+
+## Open-source examples
+
+These are complete, runnable agents built with OpenSink. Each one demonstrates a different set of primitives and patterns.
+
+All examples are available in the [opensink-examples](https://github.com/opensinkai/opensink-examples) repository.
+
+---
+
+## Finance News Agent
+
+A financial news agent that fetches articles, uses AI to analyze and categorize them, and stores the results in an OpenSink sink.
+
+**What it demonstrates:**
+
+- Sessions for tracking execution
+- Configurations for controlling agent behavior (sources, limits)
+- Activities for logging what the agent did
+- Sink Items for storing curated results
+
+**Stack:** Fastify, OpenAI, NewsAPI
+
+<Card title="Finance News Agent" icon="newspaper" href="https://github.com/opensinkai/opensink-examples/tree/main/examples/1-finance-news-agent-fastify">
+  View on GitHub
+</Card>
+
+---
+
+## Trading Agent
+
+A trading agent with a human-in-the-loop approval workflow. Analyzes market news, proposes trades, waits for human approval, then executes.
+
+**What it demonstrates:**
+
+- Sessions with durable state for tracking proposed trades
+- Input Requests for pausing and asking for human approval
+- Execution Endpoints for automatic resumption after approval
+- Sink Items for recording executed trades
+
+**Stack:** Fastify, OpenAI, NewsAPI
+
+<Card title="Trading Agent" icon="chart-line" href="https://github.com/opensinkai/opensink-examples/tree/main/examples/2-trading-agent-fastify">
+  View on GitHub
+</Card>

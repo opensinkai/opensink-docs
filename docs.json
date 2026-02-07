@@ -38,6 +38,13 @@
               "agents/activities",
               "agents/execution-endpoints"
             ]
+          },
+          {
+            "group": "Examples & Use Cases",
+            "pages": [
+              "use-cases/examples",
+              "use-cases/overview"
+            ]
           }
         ]
       },
