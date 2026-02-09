@@ -22,6 +22,13 @@
             ]
           },
           {
+            "group": "Integrations",
+            "pages": [
+              "integrations/openclaw-memory",
+              "integrations/openclaw-skills"
+            ]
+          },
+          {
             "group": "Core Concepts",
             "pages": [
               "core-concepts/agents",
@@ -45,7 +52,7 @@
               "use-cases/examples",
               "use-cases/overview"
             ]
-          }
+          },
         ]
       },
       {

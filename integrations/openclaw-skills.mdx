@@ -1,0 +1,127 @@
+---
+title: "OpenClaw Skills Pack"
+description: "A growing collection of OpenSink integrations for OpenClaw agents — starting with activity logging."
+icon: "bolt"
+---
+
+## Overview
+
+The **OpenSink Skills** pack bundles multiple OpenSink integrations into a single [OpenClaw](https://openclaw.ai) skill. One install, multiple tools.
+
+> **Looking for agent memory?** That's a separate skill — see [OpenClaw Memory Skill](/integrations/openclaw-memory).
+
+## Activity Logger
+
+Log significant agent actions to OpenSink as [Activities](/agents/activities). Creates an inspectable timeline visible in the OpenSink dashboard — perfect for audit trails, observability, and debugging.
+
+### What gets logged
+
+| Type | When to use |
+| --- | --- |
+| `message` | Agent produced output or progress update |
+| `sink_item_created` | Agent wrote data to a Sink |
+| `state_updated` | Session state changed |
+
+Log when the agent completes a task, makes a decision, encounters something notable, or interacts with external services. Don't log routine operations — Activities are **high-level, meaningful events**.
+
+## Install
+
+<Tabs>
+  <Tab title="ClawHub">
+    ```bash
+    clawhub install opensink-skills
+    ```
+  </Tab>
+  <Tab title="GitHub">
+    ```bash
+    openclaw skills install github:opensinkai/opensink-openclaw-skills
+    ```
+  </Tab>
+  <Tab title="Manual">
+    ```bash
+    git clone https://github.com/opensinkai/opensink-openclaw-skills.git
+    cp -r opensink-openclaw-skills ~/.openclaw/skills/opensink-skills
+    ```
+  </Tab>
+</Tabs>
+
+## Setup
+
+<Steps>
+  <Step title="Get an API key">
+    Sign up at [app.opensink.com](https://app.opensink.com) and create an API key.
+  </Step>
+  <Step title="Set environment variables">
+    The activity logger requires three env vars:
+    ```bash
+    export OPENSINK_API_KEY="your-api-key"
+    export OPENSINK_AGENT_ID="your-agent-id"
+    export OPENSINK_SESSION_ID="your-session-id"
+    ```
+  </Step>
+  <Step title="Configure the agent">
+    Add the credentials to your agent's `TOOLS.md`:
+    ```markdown
+    ## OpenSink
+    - **API Key:** `osk_...`
+    - **Agent ID:** `your-agent-id`
+    - **Session ID:** `your-session-id`
+    ```
+  </Step>
+</Steps>
+
+## Usage
+
+Once installed, the agent uses the skill automatically when it needs to log actions. You can also run the script directly:
+
+```bash
+export OPENSINK_API_KEY="your-key"
+export OPENSINK_AGENT_ID="your-agent-id"
+export OPENSINK_SESSION_ID="your-session-id"
+
+# Log an activity
+bash scripts/activity.sh log "Processed 12 emails, flagged 3 as urgent" "message"
+
+# Log with structured payload
+bash scripts/activity.sh log "Daily report complete" "message" '{"emails_processed": 12, "flagged": 3}'
+
+# List recent activities
+bash scripts/activity.sh list
+
+# Filter by session or type
+bash scripts/activity.sh list --session SESSION_ID
+bash scripts/activity.sh list --type message
+```
+
+## Coming soon
+
+More integrations are planned for this skill pack:
+
+| Integration | Description |
+| --- | --- |
+| **Input Requests** | Structured human-in-the-loop approval workflows |
+| **Knowledge Base** | Read from curated Sinks as shared agent knowledge |
+| **Session Sync** | Log OpenClaw conversations to OpenSink Sessions |
+
+## OpenSink primitives used
+
+| Primitive | Purpose |
+| --- | --- |
+| [Activities](/agents/activities) | Structured event log for agent actions |
+| [Sessions](/core-concepts/sessions) | Context for activity grouping |
+
+## Requirements
+
+- `curl`
+- An [OpenSink](https://opensink.com) account with API access
+
+## Source
+
+<CardGroup cols={2}>
+  <Card title="GitHub" icon="github" href="https://github.com/opensinkai/opensink-openclaw-skills">
+    Source code and contributions
+  </Card>
+  <Card title="ClawHub" icon="download" href="https://clawhub.ai">
+    Install via ClawHub
+  </Card>
+</CardGroup>

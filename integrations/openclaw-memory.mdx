@@ -1,0 +1,126 @@
+---
+title: "OpenClaw Memory Skill"
+description: "Give OpenClaw AI agents persistent, searchable memory using OpenSink Sinks."
+icon: "brain"
+---
+
+## Overview
+
+The **OpenSink Memory** skill lets [OpenClaw](https://openclaw.ai) agents store and retrieve memories using OpenSink's [Sinks](/core-concepts/sinks) API. Memories are stored as Sink Items — they persist across sessions, work across machines, and are fully searchable.
+
+When an agent needs to remember something ("Dan prefers dark mode") or recall a past decision, it uses this skill to push and query memories in the cloud.
+
+## How it works
+
+| Action | What it does |
+| --- | --- |
+| **Push** | Store a new memory with a type and timestamp |
+| **List** | Retrieve recent memories |
+| **Search** | Find memories by keyword |
+| **Get** | Fetch a specific memory by ID |
+
+Each memory is stored as a Sink Item with:
+
+- **Title** — the memory content
+- **Type** — category (`fact`, `preference`, `decision`, `event`, `note`)
+- **Occurred at** — when it happened
+
+## Install
+
+<Tabs>
+  <Tab title="ClawHub">
+    ```bash
+    clawhub install opensink-memory
+    ```
+  </Tab>
+  <Tab title="GitHub">
+    ```bash
+    openclaw skills install github:opensinkai/opensink-openclaw-memory
+    ```
+  </Tab>
+  <Tab title="Manual">
+    ```bash
+    git clone https://github.com/opensinkai/opensink-openclaw-memory.git
+    cp -r opensink-openclaw-memory ~/.openclaw/skills/opensink-memory
+    ```
+  </Tab>
+</Tabs>
+
+## Setup
+
+<Steps>
+  <Step title="Get an API key">
+    Sign up at [app.opensink.com](https://app.opensink.com) and create an API key with `sink_items:all` scope (or `all:all`).
+  </Step>
+  <Step title="Create a Memory Sink">
+    Run the included init script to create a dedicated Sink for memories:
+    ```bash
+    export OPENSINK_API_KEY="your-api-key"
+    bash scripts/init-memory-sink.sh
+    ```
+    This creates a Sink named "Memory" and outputs the Sink ID.
+  </Step>
+  <Step title="Configure the agent">
+    Add the credentials to your agent's `TOOLS.md`:
+    ```markdown
+    ## OpenSink Memory
+    - **API Key:** `osk_...`
+    - **Sink ID:** `019c...`
+    ```
+    The skill reads `OPENSINK_API_KEY` and `OPENSINK_SINK_ID` from environment variables.
+  </Step>
+</Steps>
+
+## Usage
+
+Once installed, the agent uses the skill automatically when it needs to remember or recall something. You can also run the script directly:
+
+```bash
+export OPENSINK_API_KEY="your-key"
+export OPENSINK_SINK_ID="your-sink-id"
+
+# Store a memory
+bash scripts/opensink-memory.sh push "Dan prefers dark mode" "preference"
+
+# List recent memories
+bash scripts/opensink-memory.sh list
+
+# Search memories
+bash scripts/opensink-memory.sh search "dark mode"
+
+# Get a specific memory by ID
+bash scripts/opensink-memory.sh get <item-id>
+```
+
+## Memory types
+
+| Type | Use for |
+| --- | --- |
+| `fact` | Things that are true ("Dan uses WebStorm") |
+| `preference` | User preferences ("prefers dark mode") |
+| `decision` | Choices made ("chose Sinks for memory storage") |
+| `event` | Things that happened ("deployed v2.0 on Feb 9") |
+| `note` | General notes |
+
+## OpenSink primitives used
+
+| Primitive | Purpose |
+| --- | --- |
+| [Sinks](/core-concepts/sinks) | Container for all memories |
+| Sink Items | Individual memory entries |
+
+## Requirements
+
+- `curl`
+- An [OpenSink](https://opensink.com) account with API access
+
+## Source
+
+<CardGroup cols={2}>
+  <Card title="GitHub" icon="github" href="https://github.com/opensinkai/opensink-openclaw-memory">
+    Source code and contributions
+  </Card>
+  <Card title="ClawHub" icon="download" href="https://clawhub.ai">
+    Install via ClawHub
+  </Card>
+</CardGroup>
