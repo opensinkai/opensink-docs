@@ -22,7 +22,22 @@ Log significant agent actions to OpenSink as [Activities](/agents/activities). C
 | `sink_item_created` | Agent wrote data to a Sink |
 | `state_updated` | Session state changed |
 
-Log when the agent completes a task, makes a decision, encounters something notable, or interacts with external services. Don't log routine operations — Activities are **high-level, meaningful events**.
+Think of activities as a **captain's log** — milestones, not a transcript. If someone asks "what did the agent do today?", your activities should tell the full story without the noise.
+
+**Log these:**
+- Task completed ("Generated weekly report for Q1")
+- External interactions ("Sent deployment notification to Slack")
+- Decisions made ("Escalated ticket #42 to engineering")
+- Errors and recoveries ("API rate limited, retried 3x, succeeded")
+- State changes ("Order #456 moved to shipped")
+
+**Skip these:**
+- Every chat message or reply
+- File reads and internal reasoning
+- Routine tool calls
+- Intermediate steps that don't matter on their own
+
+**Rule of thumb:** If you'd mention it in a daily standup, log it. If not, skip it.
 
 ## Install
 
