@@ -1,0 +1,106 @@
+---
+title: "MCP Server"
+description: "Connect your AI tools to OpenSink via the Model Context Protocol (MCP) server."
+icon: "plug"
+---
+
+## What is the MCP Server?
+
+The OpenSink MCP server lets AI tools — such as Claude Desktop, Cursor, VS Code, and other MCP-compatible clients — interact with your OpenSink resources directly. It exposes your sinks, agents, sessions, and more as MCP tools that AI assistants can call on your behalf.
+
+---
+
+## Connection Details
+
+| Parameter | Value |
+| --- | --- |
+| **URL** | `https://api.opensink.com/mcp` |
+| **Transport** | Streamable HTTP |
+| **Authentication** | OAuth 2.0 |
+| **OAuth Client ID** | `opensink` |
+| **OAuth Client Secret** | `opensink` |
+
+---
+
+## Setup
+
+Configuration varies by client. Below are instructions for the most common MCP-compatible tools.
+
+<Tabs>
+  <Tab title="Claude Desktop">
+    Open **Settings > MCP Servers** and add a new server with the following details:
+
+    - **URL**: `https://api.opensink.com/mcp`
+    - **OAuth Client ID**: `opensink`
+    - **OAuth Client Secret**: `opensink`
+
+    Claude Desktop will handle the OAuth flow automatically — you'll be prompted to authorize on first use.
+  </Tab>
+  <Tab title="Cursor">
+    Open **Settings > MCP** and click **Add new MCP server**. Use the following configuration:
+
+    - **Type**: Streamable HTTP
+    - **URL**: `https://api.opensink.com/mcp`
+    - **OAuth Client ID**: `opensink`
+    - **OAuth Client Secret**: `opensink`
+  </Tab>
+  <Tab title="Claude Code">
+    Run the following command in your terminal:
+
+    ```bash
+    claude mcp add opensink --transport http https://api.opensink.com/mcp
+    ```
+
+    When prompted for OAuth credentials, use:
+
+    - **Client ID**: `opensink`
+    - **Client Secret**: `opensink`
+  </Tab>
+  <Tab title="Other Clients">
+    Any MCP-compatible client that supports Streamable HTTP transport and OAuth 2.0 authentication can connect. Use these settings:
+
+    ```json
+    {
+      "url": "https://api.opensink.com/mcp",
+      "transport": "streamable-http",
+      "oauth": {
+        "client_id": "opensink",
+        "client_secret": "opensink"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Authentication
+
+The MCP server uses **OAuth 2.0** for authentication. When you connect for the first time, your client will open a browser window to complete the authorization flow. Once authorized, your client will manage token refresh automatically.
+
+<Note>
+  You must have an OpenSink account to authenticate. If you don't have one yet, [sign up on the dashboard](https://app.opensink.com).
+</Note>
+
+---
+
+## Available Tools
+
+Once connected, your AI assistant will have access to the following tools:
+
+| Tool | Description |
+| --- | --- |
+| `list_sinks` | List all available sinks in your workspace |
+| `list_sink_items` | List items in a sink with pagination |
+| `add_sink_item` | Add a new item to a sink |
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+| --- | --- |
+| OAuth flow doesn't open | Make sure your client supports OAuth 2.0. Check that the Client ID and Client Secret are both set to `opensink`. |
+| Connection timeout | Verify the URL is exactly `https://api.opensink.com/mcp` with no trailing slash. |
+| "Unauthorized" error | Re-authenticate by removing and re-adding the MCP server in your client settings. |
+| Tools not appearing | Ensure your OpenSink account has at least one resource created (e.g., a sink or agent). |
